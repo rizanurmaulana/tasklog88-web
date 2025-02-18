@@ -1,7 +1,5 @@
 import { forwardRef } from 'react';
-import { NavLink } from 'react-router-dom';
-
-import { navbarLinks } from '../constants';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import logoLight from '../assets/logo-light.svg';
 import logoDark from '../assets/logo-dark.svg';
@@ -9,8 +7,54 @@ import logoDark from '../assets/logo-dark.svg';
 import { cn } from '../utils/cn';
 
 import PropTypes from 'prop-types';
+import { Home, LogOut, NotepadText, Package, Users } from 'lucide-react';
 
 export const Sidebar = forwardRef(({ collapsed }, ref) => {
+  const location = useLocation();
+  const baseRoute = location.pathname.split('/')[1];
+
+  const navigate = useNavigate();
+
+  // Tentukan navbarLinks berdasarkan role (baseRoute)
+  const navbarLinks = [
+    {
+      links: [
+        {
+          label: 'Dashboard',
+          icon: Home,
+          path: `/${baseRoute}/dashboard`, // Tambahkan baseRoute di path
+        },
+        {
+          label: 'Projects',
+          icon: Package,
+          path: `/${baseRoute}/projects`, // Tambahkan baseRoute di path
+        },
+        {
+          label: 'Task',
+          icon: NotepadText,
+          path: `/${baseRoute}/task`, // Tambahkan baseRoute di path
+        },
+        ...(baseRoute === 'pendamping_lapangan' ||
+        baseRoute === 'pendamping_kampus'
+          ? [
+              {
+                label: 'Users',
+                icon: Users,
+                path: `/${baseRoute}/users`,
+              },
+            ]
+          : []),
+      ],
+    },
+  ];
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+
+    navigate('/');
+  };
+
   return (
     <aside
       ref={ref}
@@ -35,11 +79,6 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
             key={navbarLink.title}
             className={cn('sidebar-group', collapsed && 'md:items-center')}
           >
-            <p
-              className={cn('sidebar-group-title', collapsed && 'md:w-[45px]')}
-            >
-              {navbarLink.title}
-            </p>
             {navbarLink.links.map((link) => (
               <NavLink
                 key={link.label}
@@ -54,6 +93,15 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
             ))}
           </nav>
         ))}
+      </div>
+      <div className='mt-auto p-3'>
+        <button
+          onClick={handleLogout}
+          className='flex w-full items-center gap-x-3 rounded-lg p-3 text-red-600 hover:text-white hover:bg-red-100 dark:hover:bg-red-800'
+        >
+          <LogOut size={22} />
+          {!collapsed && <p>Logout</p>}
+        </button>
       </div>
     </aside>
   );
