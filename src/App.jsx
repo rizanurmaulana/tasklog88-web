@@ -4,6 +4,9 @@ import { ThemeProvider } from './contexts/theme-context';
 
 import Layout from './routes/layout';
 import DashboardPage from './routes/dashboard/page';
+import ProjectsPage from './routes/projects/ProjectsPage';
+import AddProject from './routes/projects/AddProject';
+import EditProject from './routes/projects/EditProject';
 
 function App() {
   const router = createBrowserRouter([
@@ -16,16 +19,24 @@ function App() {
           element: <DashboardPage />,
         },
         {
-          path: 'analytics',
-          element: <h1 className='title'>Analytics</h1>,
+          path: 'projects',
+          element: <ProjectsPage />,
         },
         {
-          path: 'reports',
-          element: <h1 className='title'>Reports</h1>,
+          path: 'projects/add',
+          element: <AddProject />,
         },
         {
-          path: 'customers',
-          element: <h1 className='title'>Customers</h1>,
+          path: 'projects/edit',
+          element: <EditProject />,
+        },
+        {
+          path: 'tasks',
+          element: <h1 className='title'>Tasks</h1>,
+        },
+        {
+          path: 'users',
+          element: <h1 className='title'>Users</h1>,
         },
         {
           path: 'new-customer',
