@@ -19,6 +19,7 @@
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5",
     "recharts": "^2.15.1",
+    "sweetalert2": "^11.17.2",
     "tailwind-merge": "^3.0.1"
   },
   "devDependencies": {
