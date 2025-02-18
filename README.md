@@ -1,8 +1,21 @@
-# React + Vite
+# Tasklog88
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Installation and Running the Project
 
-Currently, two official plugins are available:
+### 1. Clone the Repository
+```sh
+git clone https://github.com/rizanurmaulana/tasklog88-web.git
+cd tasklog88-web
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 2. Install Dependencies
+```sh
+npm install
+```
+
+### 3. Run the Application in Development Mode
+```sh
+npm run dev
+```
+
+The application will run at [http://localhost:3000](http://localhost:3000/)
