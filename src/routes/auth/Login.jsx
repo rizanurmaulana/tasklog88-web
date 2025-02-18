@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -42,6 +43,7 @@ const Login = () => {
     }
   };
 
+  
   return (
     <div className='flex min-h-screen items-center justify-center bg-slate-950 transition-colors'>
       <div className='card w-96'>
@@ -92,7 +94,7 @@ const Login = () => {
             <button
               type='submit'
               className='mt-4 w-full rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
-              disabled={loading}
+              disabled={loading} 
             >
               {loading ? 'Loading...' : 'Login'}
             </button>

@@ -3,7 +3,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import logoLight from '../assets/logo-light.svg';
 import logoDark from '../assets/logo-dark.svg';
-
+import taskLogo from '../assets/logo-tasklog88.png';
 import { cn } from '../utils/cn';
 
 import PropTypes from 'prop-types';
@@ -66,7 +66,10 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
     >
       <div className='flex gap-x-3 p-3'>
         <img src={logoLight} alt='Logoipsum' className='dark:hidden' />
-        <img src={logoDark} alt='Logoipsum' className='hidden dark:block' />
+        {/* <img src={logoDark} alt='Logoipsum' className='hidden dark:block' /> */}
+        <img src={taskLogo} alt="Logoipsum" className="hidden dark:block w-6 h-6" />
+
+        
         {!collapsed && (
           <p className='text-lg font-medium text-slate-900 transition-colors dark:text-slate-50'>
             Tasklog88
