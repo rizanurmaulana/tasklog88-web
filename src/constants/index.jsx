@@ -14,32 +14,32 @@ import {
 import ProfileImage from '../assets/profile-image.jpg';
 import ProductImage from '../assets/product-image.jpg';
 
-export const navbarLinks = [
-  {
-    links: [
-      {
-        label: 'Dashboard',
-        icon: Home,
-        path: '/',
-      },
-      {
-        label: 'Projects',
-        icon: Package,
-        path: '/projects',
-      },
-      {
-        label: 'Task',
-        icon: Package,
-        path: '/task',
-      },
-      {
-        label: 'Users',
-        icon: Users,
-        path: '/users',
-      },
-    ],
-  },
-];
+  export const navbarLinks = [
+    {
+      links: [
+        {
+          label: 'Dashboard',
+          icon: Home,
+          path: '/',
+        },
+        {
+          label: 'Projects',
+          icon: Package,
+          path: '/projects',
+        },
+        {
+          label: 'Task',
+          icon: Package,
+          path: '/task',
+        },
+        {
+          label: 'Users',
+          icon: Users,
+          path: '/users',
+        },
+      ],
+    },
+  ];
 
 export const overviewData = [
   {

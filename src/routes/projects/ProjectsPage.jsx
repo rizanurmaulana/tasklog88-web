@@ -20,16 +20,20 @@ const ProjectsPage = () => {
     navigate('/projects/edit');
   };
 
+  const role = localStorage.getItem('role');
+
   return (
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
         <h1 className='title'>Projects</h1>
-        <button
-          className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
-          onClick={handleAddProject}
-        >
-          <SquarePlus /> Add Project
-        </button>
+        {(role === 'pendamping_lapangan' || role === 'peserta') && (
+          <button
+            className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
+            onClick={handleAddProject}
+          >
+            <SquarePlus /> Add Project
+          </button>
+        )}
       </div>
       <div className='card'>
         <div className='card-body p-0'>
@@ -63,7 +67,7 @@ const ProjectsPage = () => {
                             ? 'bg-blue-500'
                             : project.status === 'Done'
                               ? 'bg-green-500'
-                                : ''
+                              : ''
                         }`}
                       >
                         {project.status}
