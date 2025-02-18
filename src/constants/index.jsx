@@ -16,7 +16,6 @@ import ProductImage from '../assets/product-image.jpg';
 
 export const navbarLinks = [
   {
-    title: 'Dashboard',
     links: [
       {
         label: 'Dashboard',
@@ -24,64 +23,19 @@ export const navbarLinks = [
         path: '/',
       },
       {
-        label: 'Analytics',
-        icon: ChartColumn,
-        path: '/analytics',
-      },
-      {
-        label: 'Reports',
-        icon: NotepadText,
-        path: '/reports',
-      },
-    ],
-  },
-  {
-    title: 'Customers',
-    links: [
-      {
-        label: 'Customers',
-        icon: Users,
-        path: '/customers',
-      },
-      {
-        label: 'New customer',
-        icon: UserPlus,
-        path: '/new-customer',
-      },
-      {
-        label: 'Verified customers',
-        icon: UserCheck,
-        path: '/verified-customers',
-      },
-    ],
-  },
-  {
-    title: 'Products',
-    links: [
-      {
-        label: 'Products',
+        label: 'Projects',
         icon: Package,
-        path: '/products',
+        path: '/projects',
       },
       {
-        label: 'New product',
-        icon: PackagePlus,
-        path: '/new-product',
+        label: 'Task',
+        icon: NotepadText,
+        path: '/tasks',
       },
       {
-        label: 'Inventory',
-        icon: ShoppingBag,
-        path: '/inventory',
-      },
-    ],
-  },
-  {
-    title: 'Settings',
-    links: [
-      {
-        label: 'Settings',
-        icon: Settings,
-        path: '/settings',
+        label: 'Users',
+        icon: Users,
+        path: '/users',
       },
     ],
   },
@@ -280,5 +234,88 @@ export const topProducts = [
     price: 79.99,
     status: 'Out of Stock',
     rating: 4.5,
+  },
+];
+
+export const projectList = [
+  {
+    id: 1,
+    name: 'Website Portfolio',
+    startDate: '2024-01-10',
+    endDate: '2024-02-15',
+    status: 'Completed',
+    actions: 'View Details',
+  },
+  {
+    id: 2,
+    name: 'E-Commerce App',
+    startDate: '2024-02-20',
+    endDate: '2024-04-30',
+    status: 'In Progress',
+    actions: 'Edit',
+  },
+  {
+    id: 3,
+    name: 'Company Landing Page',
+    startDate: '2024-03-05',
+    endDate: '2024-03-25',
+    status: 'Not Started',
+    actions: 'Start Project',
+  },
+  {
+    id: 4,
+    name: 'Mobile Banking App',
+    startDate: '2023-12-01',
+    endDate: '2024-06-30',
+    status: 'In Progress',
+    actions: 'Edit',
+  },
+  {
+    id: 5,
+    name: 'Social Media Dashboard',
+    startDate: '2024-02-10',
+    endDate: '2024-05-20',
+    status: 'In Progress',
+    actions: 'Edit',
+  },
+  {
+    id: 6,
+    name: 'CRM System',
+    startDate: '2024-04-01',
+    endDate: '2024-07-15',
+    status: 'Not Started',
+    actions: 'Start Project',
+  },
+  {
+    id: 7,
+    name: 'Task Management App',
+    startDate: '2023-11-15',
+    endDate: '2024-03-10',
+    status: 'Completed',
+    actions: 'View Details',
+  },
+  {
+    id: 8,
+    name: 'Event Booking Platform',
+    startDate: '2024-03-20',
+    endDate: '2024-06-01',
+    status: 'Not Started',
+    actions: 'Start Project',
+  },
+  {
+    id: 9,
+    name: 'Online Learning Portal',
+    startDate: '2024-01-25',
+    endDate: '2024-05-10',
+    status: 'In Progress',
+    actions: 'Edit',
+  },
+  {
+    id: 10,
+    name: 'AI Chatbot Integration',
+    startDate: '2024-05-05',
+    endDate: '2024-08-15',
+    status: 'Not Started',
+    actions: 'Start Project',
   },
 ];
