@@ -29,8 +29,8 @@ export const navbarLinks = [
       },
       {
         label: 'Task',
-        icon: NotepadText,
-        path: '/tasks',
+        icon: Package,
+        path: '/task',
       },
       {
         label: 'Users',
@@ -243,7 +243,7 @@ export const projectList = [
     name: 'Website Portfolio',
     startDate: '2024-01-10',
     endDate: '2024-02-15',
-    status: 'Completed',
+    status: 'On Going',
     actions: 'View Details',
   },
   {
@@ -251,7 +251,7 @@ export const projectList = [
     name: 'E-Commerce App',
     startDate: '2024-02-20',
     endDate: '2024-04-30',
-    status: 'In Progress',
+    status: 'Done',
     actions: 'Edit',
   },
   {
@@ -259,7 +259,7 @@ export const projectList = [
     name: 'Company Landing Page',
     startDate: '2024-03-05',
     endDate: '2024-03-25',
-    status: 'Not Started',
+    status: 'On Going',
     actions: 'Start Project',
   },
   {
@@ -267,7 +267,7 @@ export const projectList = [
     name: 'Mobile Banking App',
     startDate: '2023-12-01',
     endDate: '2024-06-30',
-    status: 'In Progress',
+    status: 'Done',
     actions: 'Edit',
   },
   {
@@ -275,7 +275,7 @@ export const projectList = [
     name: 'Social Media Dashboard',
     startDate: '2024-02-10',
     endDate: '2024-05-20',
-    status: 'In Progress',
+    status: 'On Going',
     actions: 'Edit',
   },
   {
@@ -283,7 +283,7 @@ export const projectList = [
     name: 'CRM System',
     startDate: '2024-04-01',
     endDate: '2024-07-15',
-    status: 'Not Started',
+    status: 'Done',
     actions: 'Start Project',
   },
   {
@@ -291,7 +291,7 @@ export const projectList = [
     name: 'Task Management App',
     startDate: '2023-11-15',
     endDate: '2024-03-10',
-    status: 'Completed',
+    status: 'On Going',
     actions: 'View Details',
   },
   {
@@ -299,7 +299,7 @@ export const projectList = [
     name: 'Event Booking Platform',
     startDate: '2024-03-20',
     endDate: '2024-06-01',
-    status: 'Not Started',
+    status: 'On Going',
     actions: 'Start Project',
   },
   {
@@ -315,7 +315,50 @@ export const projectList = [
     name: 'AI Chatbot Integration',
     startDate: '2024-05-05',
     endDate: '2024-08-15',
-    status: 'Not Started',
+    status: 'On Going',
     actions: 'Start Project',
+  },
+];
+
+export const taskList = [
+  {
+    id: 1,
+    nameTask: 'Riza',
+    nameProject: 'Website Portfolio',
+    username: 'riza',
+    startDate: '2024-01-10',
+    endDate: '2024-02-15',
+    status: 'On Going',
+    actions: 'View Details',
+  },
+  {
+    id: 2,
+    nameTask: 'rifki',
+    nameProject: 'Website Penjualan',
+    username: 'rifki123',
+    startDate: '2024-01-10',
+    endDate: '2024-02-15',
+    status: 'Done',
+    actions: 'View Details',
+  },
+  {
+    id: 3,
+    nameTask: 'rifki',
+    nameProject: 'Website Penjualan',
+    username: 'rifki123',
+    startDate: '2024-01-10',
+    endDate: '2024-02-15',
+    status: 'On Going',
+    actions: 'View Details',
+  },
+  {
+    id: 4,
+    nameTask: 'rifki',
+    nameProject: 'Website Penjualan',
+    username: 'rifki123',
+    startDate: '2024-01-10',
+    endDate: '2024-02-15',
+    status: 'Done',
+    actions: 'View Details',
   },
 ];

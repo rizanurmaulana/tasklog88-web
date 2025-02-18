@@ -7,6 +7,9 @@ import DashboardPage from './routes/dashboard/page';
 import ProjectsPage from './routes/projects/ProjectsPage';
 import AddProject from './routes/projects/AddProject';
 import EditProject from './routes/projects/EditProject';
+import TaskPage from './routes/task/TaskPage';
+import AddTask from './routes/task/AddTask';
+import EditTask from './routes/task/EditTask';
 
 function App() {
   const router = createBrowserRouter([
@@ -31,9 +34,18 @@ function App() {
           element: <EditProject />,
         },
         {
-          path: 'tasks',
-          element: <h1 className='title'>Tasks</h1>,
+          path: 'task',
+          element: <TaskPage />,
         },
+        {
+          path: 'task/add',
+          element: <AddTask />,
+        },
+        {
+          path: 'task/edit',
+          element: <EditTask />,
+        },
+        
         {
           path: 'users',
           element: <h1 className='title'>Users</h1>,

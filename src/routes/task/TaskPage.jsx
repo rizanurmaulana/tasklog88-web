@@ -1,34 +1,34 @@
 import { useTheme } from '../../hooks/use-theme';
 
-import { projectList } from '../../constants';
+import { taskList } from '../../constants';
 
 import { Footer } from '../../layouts/footer';
 
 import { PencilLine, SquarePlus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const ProjectsPage = () => {
+const TaskPage = () => {
   const { theme } = useTheme();
 
   const navigate = useNavigate();
 
-  const handleAddProject = () => {
-    navigate('/projects/add');
+  const handleAddTask = () => {
+    navigate('/task/add');
   };
 
-  const handleEditProject = () => {
-    navigate('/projects/edit');
+  const handleEditTask = () => {
+    navigate('/task/edit');
   };
 
   return (
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
-        <h1 className='title'>Projects</h1>
+        <h1 className='title'>Task</h1>
         <button
           className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
-          onClick={handleAddProject}
+          onClick={handleAddTask}
         >
-          <SquarePlus /> Add Project
+          <SquarePlus /> Add Task
         </button>
       </div>
       <div className='card'>
@@ -38,7 +38,9 @@ const ProjectsPage = () => {
               <thead className='table-header'>
                 <tr className='table-row'>
                   <th className='table-head'>#</th>
+                  <th className='table-head'>Nama Task</th>
                   <th className='table-head'>Nama Project</th>
+                  <th className='table-head'>Nama User</th>
                   <th className='table-head'>Tanggal Mulai</th>
                   <th className='table-head'>Tanggal Selesai</th>
                   <th className='table-head'>Status</th>
@@ -46,34 +48,44 @@ const ProjectsPage = () => {
                 </tr>
               </thead>
               <tbody className='table-body'>
-                {projectList.map((project, index) => (
-                  <tr key={project.number} className='table-row'>
+                {taskList.map((tasks, index) => (
+                  <tr key={tasks.number} className='table-row'>
                     <td className='table-cell'>{index + 1}</td>
                     <td className='table-cell'>
                       <div className='flex w-max gap-x-4'>
-                        <p>{project.name}</p>
+                        <p>{tasks.nameTask}</p>
                       </div>
                     </td>
-                    <td className='table-cell'>{project.startDate}</td>
-                    <td className='table-cell'>{project.endDate}</td>
+                    <td className='table-cell'>
+                      <div className='flex w-max gap-x-4'>
+                        <p>{tasks.nameProject}</p>
+                      </div>
+                    </td>
+                    <td className='table-cell'>
+                      <div className='flex w-max gap-x-4'>
+                        <p>{tasks.username}</p>
+                      </div>
+                    </td>
+                    <td className='table-cell'>{tasks.startDate}</td>
+                    <td className='table-cell'>{tasks.endDate}</td>
                     <td className='table-cell'>
                       <div
                         className={`flex w-fit items-center justify-center rounded-full px-3 py-1 ${
-                          project.status === 'On Going'
+                          tasks.status === 'On Going'
                             ? 'bg-blue-500'
-                            : project.status === 'Done'
+                            : tasks.status === 'Done'
                               ? 'bg-green-500'
                                 : ''
                         }`}
                       >
-                        {project.status}
+                        {tasks.status}
                       </div>
                     </td>
                     <td className='table-cell'>
                       <div className='flex items-center'>
                         <button
                           className='flex items-center gap-x-2 text-blue-500 dark:text-blue-600'
-                          onClick={handleEditProject}
+                          onClick={handleEditTask}
                         >
                           <PencilLine size={20} />
                           Edit
@@ -92,4 +104,4 @@ const ProjectsPage = () => {
   );
 };
 
-export default ProjectsPage;
+export default TaskPage;
