@@ -57,7 +57,7 @@
   }
 
   .table {
-    @apply h-full w-full text-slate-900 dark:text-slate-50;
+    @apply h-fit w-full text-slate-900 dark:text-slate-50;
   }
 
   .table-header {

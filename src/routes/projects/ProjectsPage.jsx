@@ -1,54 +1,72 @@
-import { useTheme } from '../../hooks/use-theme';
-
 import { projectList } from '../../constants';
 
 import { Footer } from '../../layouts/footer';
 
 import { PencilLine, SquarePlus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useTheme } from '../../hooks/use-theme';
 
 const ProjectsPage = () => {
   const { theme } = useTheme();
 
-  const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = localStorage.getItem('token');
 
-  const handleAddProject = () => {
-    navigate('/projects/add');
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get('http://localhost:9000/api/v1/projects', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setData(res.data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleEditProject = () => {
-    navigate('/projects/edit');
+    if (token) {
+      fetchData();
+    } else {
+      setError('No token found');
+      setLoading(false);
+    }
+  }, [token]);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
   };
 
   const role = localStorage.getItem('role');
-
-  // const [role, setRole] = useState("");
-
-  // useEffect(() => {
-  //   const storedRole = localStorage.getItem("role");
-  //   if (storedRole) {
-  //     setRole(storedRole.trim()); // Hapus spasi tersembunyi
-  //   }
-  // }, []);
-
 
   return (
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
         <h1 className='title'>Projects</h1>
-        {(role === 'pendamping_lapangan') && (
-          <button
+        {role === 'pendamping_lapangan' && (
+          <Link
+            to='add'
             className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
-            onClick={handleAddProject}
           >
             <SquarePlus /> Add Project
-          </button>
+          </Link>
         )}
       </div>
       <div className='card'>
         <div className='card-body p-0'>
-          <div className='relative h-[500px] w-full flex-shrink-0 overflow-auto rounded-none [scrollbar-width:_thin]'>
+          <div className='relative max-h-[500px] w-full flex-shrink-0 overflow-auto rounded-none [scrollbar-width:_thin]'>
             <table className='table'>
               <thead className='table-header'>
                 <tr className='table-row'>
@@ -57,60 +75,68 @@ const ProjectsPage = () => {
                   <th className='table-head'>Tanggal Mulai</th>
                   <th className='table-head'>Tanggal Selesai</th>
                   <th className='table-head'>Status</th>
-                  {(role === "pendamping_lapangan" || role === "peserta") && (
+                  {(role === 'pendamping_lapangan' || role === 'peserta') && (
                     <th className='table-head'>Actions</th>
                   )}
-
-
-
-
                 </tr>
               </thead>
               <tbody className='table-body'>
-                {projectList.map((project, index) => (
-                  <tr key={project.number} className='table-row'>
-                    <td className='table-cell'>{index + 1}</td>
-                    <td className='table-cell'>
-                      <div className='flex w-max gap-x-4'>
-                        <p>{project.name}</p>
-                      </div>
-                    </td>
-                    <td className='table-cell'>{project.startDate}</td>
-                    <td className='table-cell'>{project.endDate}</td>
-                    <td className='table-cell'>
-                      <div
-                        className={`flex w-fit items-center justify-center rounded-full px-3 py-1 ${project.status === 'On Going'
-                          ? 'bg-blue-500'
-                          : project.status === 'Done'
-                            ? 'bg-green-500'
-                            : ''
+                {data?.project?.data && data.project.data.length > 0 ? (
+                  data.project.data.map((project, index) => (
+                    <tr
+                      key={project.id || `project-${index}`}
+                      className='table-row'
+                    >
+                      <td className='table-cell'>{index + 1}</td>
+                      <td className='table-cell'>
+                        <div className='flex w-max gap-x-4'>
+                          <p>{project.nama_project}</p>
+                        </div>
+                      </td>
+                      <td className='table-cell'>
+                        {formatDate(project.tgl_mulai_project) || 'N/A'}
+                      </td>
+                      <td className='table-cell'>
+                        {formatDate(project.tgl_akhir_project) || 'N/A'}
+                      </td>
+                      <td className='table-cell'>
+                        <div
+                          className={`flex w-fit items-center justify-center rounded-full px-3 py-1 capitalize ${
+                            project.status_project === 'on going'
+                              ? 'bg-blue-500 text-white'
+                              : project.status_project === 'done'
+                                ? 'bg-green-500 text-white'
+                                : ''
                           }`}
-                      >
-                        {project.status}
-                      </div>
-                    </td>
-                    <td className='table-cell'>
-                      <div className='flex items-center'>
-                        {(role === 'pendamping_lapangan' || role === 'peserta') && (
-                          <button
-                            className='flex items-center gap-x-2 text-blue-500 dark:text-blue-600'
-                            onClick={handleEditProject}
+                        >
+                          {project.status_project || 'Unknown'}
+                        </div>
+                      </td>
+                      <td className='table-cell'>
+                        <div className='flex items-center'>
+                          <Link
+                            to={`edit/${project.id_project}`}
+                            className='flex items-center gap-x-2 text-blue-500 dark:text-white'
                           >
                             <PencilLine size={20} />
                             Edit
-                          </button>
-                        )}
-
-                      </div>
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className='py-4 text-center'>
+                      No data available
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
