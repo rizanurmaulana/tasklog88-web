@@ -5,6 +5,8 @@ import { Footer } from '../../layouts/footer';
 
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+
 
 const AddProject = () => {
   const { theme } = useTheme();
@@ -42,19 +44,34 @@ const AddProject = () => {
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
-        },
+        }
       );
 
-      setMessage('Project successfully created!');
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Data berhasil dimasukkan!',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
       console.log(res.data);
       setTimeout(() => navigate(-1), 2000);
     } catch (err) {
       console.error('Error creating project:', err);
       setError(err.response?.data?.message || 'Failed to create project');
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: err.response?.data?.message || 'Gagal membuat proyek',
+      });
     } finally {
       setLoading(false);
     }
   };
+
+
 
   return (
     <div className='flex flex-col gap-y-4'>
@@ -138,9 +155,8 @@ const AddProject = () => {
               type='submit'
               className='rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
             >
-              {loading ? 'Submitting...' : 'Tambah Projek'}
+              {loading ? 'Submitting...' : 'Tambah Projects'}
             </button>
-            {message && <p className='mt-2 text-center'>{message}</p>}
           </form>
         </div>
       </div>

@@ -33,9 +33,9 @@ import ProductImage from '../assets/product-image.jpg';
           path: '/task',
         },
         {
-          label: 'Users',
+          label: 'User',
           icon: Users,
-          path: '/users',
+          path: '/user',
         },
       ],
     },
