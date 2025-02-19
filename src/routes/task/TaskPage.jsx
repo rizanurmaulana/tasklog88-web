@@ -26,7 +26,7 @@ const TaskPage = () => {
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
         <h1 className='title'>Task</h1>
-        {(role === 'pendamping_lapangan' || role === 'peserta') && (
+        {(role === 'pendamping_lapangan') && (
           <button
             className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
             onClick={handleAddTask}
@@ -48,7 +48,9 @@ const TaskPage = () => {
                   <th className='table-head'>Tanggal Mulai</th>
                   <th className='table-head'>Tanggal Selesai</th>
                   <th className='table-head'>Status</th>
-                  <th className='table-head'>Actions</th>
+                  {(role === "pendamping_lapangan" || role === "peserta") ? (
+                    <th className='table-head'>Actions</th>
+                  ) : null}
                 </tr>
               </thead>
               <tbody className='table-body'>
@@ -87,13 +89,15 @@ const TaskPage = () => {
                     </td>
                     <td className='table-cell'>
                       <div className='flex items-center'>
+                      {(role === 'pendamping_lapangan' || role === 'peserta') && (
                         <button
-                          className='flex items-center gap-x-2 text-blue-500 dark:text-blue-600'
-                          onClick={handleEditTask}
+                        className='flex items-center gap-x-2 text-blue-500 dark:text-blue-600'
+                        onClick={handleEditTask}
                         >
                           <PencilLine size={20} />
                           Edit
                         </button>
+                      )}
                       </div>
                     </td>
                   </tr>

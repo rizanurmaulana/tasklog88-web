@@ -6,6 +6,7 @@ import { Footer } from '../../layouts/footer';
 
 import { PencilLine, SquarePlus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
 
 const ProjectsPage = () => {
   const { theme } = useTheme();
@@ -22,11 +23,21 @@ const ProjectsPage = () => {
 
   const role = localStorage.getItem('role');
 
+  // const [role, setRole] = useState("");
+
+  // useEffect(() => {
+  //   const storedRole = localStorage.getItem("role");
+  //   if (storedRole) {
+  //     setRole(storedRole.trim()); // Hapus spasi tersembunyi
+  //   }
+  // }, []);
+
+
   return (
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
         <h1 className='title'>Projects</h1>
-        {(role === 'pendamping_lapangan' || role === 'peserta') && (
+        {(role === 'pendamping_lapangan') && (
           <button
             className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
             onClick={handleAddProject}
@@ -46,7 +57,13 @@ const ProjectsPage = () => {
                   <th className='table-head'>Tanggal Mulai</th>
                   <th className='table-head'>Tanggal Selesai</th>
                   <th className='table-head'>Status</th>
-                  <th className='table-head'>Actions</th>
+                  {(role === "pendamping_lapangan" || role === "peserta") && (
+                    <th className='table-head'>Actions</th>
+                  )}
+
+
+
+
                 </tr>
               </thead>
               <tbody className='table-body'>
@@ -62,26 +79,28 @@ const ProjectsPage = () => {
                     <td className='table-cell'>{project.endDate}</td>
                     <td className='table-cell'>
                       <div
-                        className={`flex w-fit items-center justify-center rounded-full px-3 py-1 ${
-                          project.status === 'On Going'
-                            ? 'bg-blue-500'
-                            : project.status === 'Done'
-                              ? 'bg-green-500'
-                              : ''
-                        }`}
+                        className={`flex w-fit items-center justify-center rounded-full px-3 py-1 ${project.status === 'On Going'
+                          ? 'bg-blue-500'
+                          : project.status === 'Done'
+                            ? 'bg-green-500'
+                            : ''
+                          }`}
                       >
                         {project.status}
                       </div>
                     </td>
                     <td className='table-cell'>
                       <div className='flex items-center'>
-                        <button
-                          className='flex items-center gap-x-2 text-blue-500 dark:text-blue-600'
-                          onClick={handleEditProject}
-                        >
-                          <PencilLine size={20} />
-                          Edit
-                        </button>
+                        {(role === 'pendamping_lapangan' || role === 'peserta') && (
+                          <button
+                            className='flex items-center gap-x-2 text-blue-500 dark:text-blue-600'
+                            onClick={handleEditProject}
+                          >
+                            <PencilLine size={20} />
+                            Edit
+                          </button>
+                        )}
+
                       </div>
                     </td>
                   </tr>
