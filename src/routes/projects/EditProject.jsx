@@ -5,6 +5,7 @@ import { Footer } from '../../layouts/footer';
 
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const EditProject = () => {
   const { id } = useParams();
@@ -60,31 +61,45 @@ const EditProject = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage('');
-    setError('');
 
-    try {
-      const res = await axios.put(
-        `http://localhost:9000/api/v1/projects/${id}`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setMessage('');
+  setError('');
 
-      setMessage('Project successfully updated!');
-      console.log(res.data);
-      setTimeout(() => navigate(-1), 2000);
-    } catch (err) {
-      console.error('Error updating project:', err);
-      setError(err.response?.data?.message || 'Failed to update project');
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const res = await axios.put(
+      `http://localhost:9000/api/v1/projects/${id}`,
+      formData,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Berhasil!',
+      text: 'Project berhasil diperbarui!',
+      timer: 2000,
+      showConfirmButton: false,
+    });
+
+    console.log(res.data);
+    setTimeout(() => navigate(-1), 2000);
+  } catch (err) {
+    console.error('Error updating project:', err);
+    setError(err.response?.data?.message || 'Gagal memperbarui project');
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal!',
+      text: err.response?.data?.message || 'Gagal memperbarui project',
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className='flex flex-col gap-y-4'>

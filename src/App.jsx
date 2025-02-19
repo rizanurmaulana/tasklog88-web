@@ -11,6 +11,10 @@ import TaskPage from './routes/task/TaskPage';
 import AddTask from './routes/task/AddTask';
 import EditTask from './routes/task/EditTask';
 import Login from './routes/auth/Login';
+import UserPage from './routes/user/UserPage';
+import AddUser from './routes/user/AddUser';
+import EditUser from './routes/user/EditUser';
+import UbahPass from './routes/user/UbahPass';
 
 function App() {
   const router = createBrowserRouter([
@@ -43,6 +47,10 @@ function App() {
         { path: 'task', element: <TaskPage /> },
         { path: 'task/add', element: <AddTask /> },
         { path: 'task/edit/:id', element: <EditTask /> },
+        { path: 'user', element: <UserPage /> },
+        { path: 'user/add', element: <AddUser /> },
+        { path: 'user/edit/:id', element: <EditUser /> },
+        { path: 'user/ubah/:id', element: <UbahPass /> },
       ],
     },
     // Routing untuk Pendamping Kampus

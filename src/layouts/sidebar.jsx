@@ -38,9 +38,9 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
         baseRoute === 'pendamping_kampus'
           ? [
               {
-                label: 'Users',
+                label: 'User',
                 icon: Users,
-                path: `/${baseRoute}/users`,
+                path: `/${baseRoute}/user`,
               },
             ]
           : []),

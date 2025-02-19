@@ -1,15 +1,13 @@
-import { projectList } from '../../constants';
-
-import { Footer } from '../../layouts/footer';
-
-import { PencilLine, SquarePlus } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import Swal from "sweetalert2";
 import axios from 'axios';
 import { useTheme } from '../../hooks/use-theme';
+import { PencilLine, SquarePlus } from 'lucide-react';
 
 const ProjectsPage = () => {
   const { theme } = useTheme();
+  const navigate = useNavigate(); // Tambahkan useNavigate()
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,6 +44,25 @@ const ProjectsPage = () => {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
+    });
+  };
+
+  const handleEdit = (event, projectId) => {
+    event.preventDefault(); // Mencegah navigasi otomatis
+
+    Swal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Anda akan mengubah data proyek ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Edit",
+      cancelButtonText: "Batal"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate(`edit/${projectId}`); // Pindah ke halaman edit jika dikonfirmasi
+      }
     });
   };
 
@@ -116,6 +133,7 @@ const ProjectsPage = () => {
                         <div className='flex items-center'>
                           <Link
                             to={`edit/${project.id_project}`}
+                            onClick={(event) => handleEdit(event, project.id_project)}
                             className='flex items-center gap-x-2 text-blue-500 dark:text-white'
                           >
                             <PencilLine size={20} />
