@@ -3,6 +3,7 @@ import { useTheme } from '../../hooks/use-theme';
 
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const AddTask = () => {
   const { theme } = useTheme();
@@ -67,22 +68,36 @@ const AddTask = () => {
     setError('');
 
     try {
-      const res = await axios.put(
-        `http://localhost:9000/api/v1/tasks/edit/${id}`,
+      const res = await axios.post(
+        'http://localhost:9000/api/v1/tasks',
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
 
-      setMessage('Task successfully created!');
-      setTimeout(() => navigate(-1), 2000);
-    } catch (err) {
-      console.error('Error creating task:', err);
-      setError(err.response?.data?.message || 'Failed to create task');
-    } finally {
-      setLoading(false);
-    }
+      Swal.fire({
+              icon: 'success',
+              title: 'Berhasil!',
+              text: 'Data berhasil dimasukkan!',
+              timer: 2000,
+              showConfirmButton: false,
+            });
+      
+            console.log(res.data);
+            setTimeout(() => navigate(-1), 2000);
+          } catch (err) {
+            console.error('Error creating project:', err);
+            setError(err.response?.data?.message || 'Failed to create project');
+      
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal!',
+              text: err.response?.data?.message || 'Gagal membuat proyek',
+            });
+          } finally {
+            setLoading(false);
+          }
   };
 
   return (

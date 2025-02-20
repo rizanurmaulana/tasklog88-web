@@ -5,6 +5,7 @@ import { Footer } from '../../layouts/footer';
 
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const EditTask = () => {
   const { id } = useParams();
@@ -111,12 +112,24 @@ const EditTask = () => {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-
-      setMessage('Task successfully created!');
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Project berhasil diperbarui!',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+  
+      console.log(res.data);
       setTimeout(() => navigate(-1), 2000);
     } catch (err) {
-      console.error('Error creating task:', err);
-      setError(err.response?.data?.message || 'Failed to create task');
+      console.error('Error updating project:', err);
+      setError(err.response?.data?.message || 'Gagal memperbarui project');
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: err.response?.data?.message || 'Gagal memperbarui project',
+      });
     } finally {
       setLoading(false);
     }
