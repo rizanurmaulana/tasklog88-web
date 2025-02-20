@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useTheme } from '../../hooks/use-theme';
-
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
 const AddTask = () => {
-  const { theme } = useTheme();
   const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const token = localStorage.getItem('token');
 
   const [formData, setFormData] = useState({
     nama_task: '',
@@ -17,13 +20,6 @@ const AddTask = () => {
     tgl_akhir_task: '',
     status_task: 'on going',
   });
-
-  const [users, setUsers] = useState([]);
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const token = localStorage.getItem('token');
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -77,27 +73,27 @@ const AddTask = () => {
       );
 
       Swal.fire({
-              icon: 'success',
-              title: 'Berhasil!',
-              text: 'Data berhasil dimasukkan!',
-              timer: 2000,
-              showConfirmButton: false,
-            });
-      
-            console.log(res.data);
-            setTimeout(() => navigate(-1), 2000);
-          } catch (err) {
-            console.error('Error creating project:', err);
-            setError(err.response?.data?.message || 'Failed to create project');
-      
-            Swal.fire({
-              icon: 'error',
-              title: 'Gagal!',
-              text: err.response?.data?.message || 'Gagal membuat proyek',
-            });
-          } finally {
-            setLoading(false);
-          }
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Data berhasil dimasukkan!',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      console.log(res.data);
+      setTimeout(() => navigate(-1), 2000);
+    } catch (err) {
+      console.error('Error creating project:', err);
+      setError(err.response?.data?.message || 'Failed to create project');
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: err.response?.data?.message || 'Gagal membuat proyek',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -109,10 +105,7 @@ const AddTask = () => {
         <div className='card-body p-0'>
           <form onSubmit={handleSubmit}>
             <div className='mb-4'>
-              <label
-                htmlFor='nama_task'
-                className='mb-2 block font-medium text-white'
-              >
+              <label htmlFor='nama_task' className='mb-2 block font-medium'>
                 Nama Task
               </label>
               <input
@@ -123,14 +116,11 @@ const AddTask = () => {
                 value={formData.nama_task}
                 onChange={handleChange}
                 required
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
             <div className='mb-4'>
-              <label
-                htmlFor='id_project'
-                className='mb-2 block font-medium text-white'
-              >
+              <label htmlFor='id_project' className='mb-2 block font-medium'>
                 Nama Project
               </label>
               <select
@@ -143,7 +133,7 @@ const AddTask = () => {
                     id_project: e.target.value,
                   }))
                 }
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               >
                 <option disabled>-- Pilih Project --</option>
                 {projects.length > 0 ? (
@@ -158,10 +148,7 @@ const AddTask = () => {
               </select>
             </div>
             <div className='mb-4'>
-              <label
-                htmlFor='id_user'
-                className='mb-2 block font-medium text-white'
-              >
+              <label htmlFor='id_user' className='mb-2 block font-medium'>
                 Nama Lengkap
               </label>
               <select
@@ -174,7 +161,7 @@ const AddTask = () => {
                     id_user: e.target.value,
                   }))
                 }
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               >
                 <option disabled>-- Pilih User --</option>
                 {users.length > 0 ? (
@@ -191,7 +178,7 @@ const AddTask = () => {
             <div className='mb-4'>
               <label
                 htmlFor='tgl_mulai_task'
-                className='mb-2 block font-medium text-white'
+                className='mb-2 block font-medium'
               >
                 Tanggal Mulai
               </label>
@@ -202,13 +189,13 @@ const AddTask = () => {
                 value={formData.tgl_mulai_task}
                 onChange={handleChange}
                 required
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
             <div className='mb-4'>
               <label
                 htmlFor='tgl_akhir_task'
-                className='mb-2 block font-medium text-white'
+                className='mb-2 block font-medium'
               >
                 Tanggal Selesai
               </label>
@@ -219,20 +206,17 @@ const AddTask = () => {
                 value={formData.tgl_akhir_task}
                 onChange={handleChange}
                 required
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
             <div className='mb-4'>
-              <label
-                htmlFor='status_task'
-                className='mb-2 block font-medium text-white'
-              >
+              <label htmlFor='status_task' className='mb-2 block font-medium'>
                 Status
               </label>
               <select
                 name='status_task'
                 id='status_task'
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               >
                 <option value='on going'>On Going</option>
                 <option value='done'>Done</option>

@@ -6,13 +6,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-
-import { useTheme } from '../../hooks/use-theme';
-
 import { overviewData, recentSalesData, topProducts } from '../../constants';
-
-import { Footer } from '../../layouts/footer';
-
 import {
   CreditCard,
   DollarSign,
@@ -25,24 +19,22 @@ import {
 } from 'lucide-react';
 
 const DashboardPage = () => {
-  const { theme } = useTheme();
-
   return (
     <div className='flex flex-col gap-y-4'>
       <h1 className='title'>Dashboard</h1>
       <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         <div className='card'>
           <div className='card-header'>
-            <div className='w-fit rounded-lg bg-blue-500/20 p-2 text-blue-500 transition-colors dark:bg-blue-600/20 dark:text-blue-600'>
+            <div className='w-fit rounded-lg bg-blue-500/20 p-2 text-blue-500 transition-colors'>
               <Package size={26} />
             </div>
             <p className='card-title'>Total Products</p>
           </div>
-          <div className='card-body bg-slate-100 transition-colors dark:bg-slate-950'>
-            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>
+          <div className='card-body bg-slate-100 transition-colors'>
+            <p className='text-3xl font-bold text-slate-900 transition-colors'>
               25,154
             </p>
-            <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500 dark:border-blue-600 dark:text-blue-600'>
+            <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500'>
               <TrendingUp size={18} />
               25%
             </span>
@@ -50,16 +42,16 @@ const DashboardPage = () => {
         </div>
         <div className='card'>
           <div className='card-header'>
-            <div className='rounded-lg bg-blue-500/20 p-2 text-blue-500 transition-colors dark:bg-blue-600/20 dark:text-blue-600'>
+            <div className='rounded-lg bg-blue-500/20 p-2 text-blue-500 transition-colors'>
               <DollarSign size={26} />
             </div>
             <p className='card-title'>Total Paid Orders</p>
           </div>
-          <div className='card-body bg-slate-100 transition-colors dark:bg-slate-950'>
-            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>
+          <div className='card-body bg-slate-100 transition-colors'>
+            <p className='text-3xl font-bold text-slate-900 transition-colors'>
               $16,000
             </p>
-            <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500 dark:border-blue-600 dark:text-blue-600'>
+            <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500'>
               <TrendingUp size={18} />
               12%
             </span>
@@ -67,16 +59,16 @@ const DashboardPage = () => {
         </div>
         <div className='card'>
           <div className='card-header'>
-            <div className='rounded-lg bg-blue-500/20 p-2 text-blue-500 transition-colors dark:bg-blue-600/20 dark:text-blue-600'>
+            <div className='rounded-lg bg-blue-500/20 p-2 text-blue-500 transition-colors'>
               <Users size={26} />
             </div>
             <p className='card-title'>Total Customers</p>
           </div>
-          <div className='card-body bg-slate-100 transition-colors dark:bg-slate-950'>
-            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>
+          <div className='card-body bg-slate-100 transition-colors'>
+            <p className='text-3xl font-bold text-slate-900 transition-colors'>
               15,400k
             </p>
-            <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500 dark:border-blue-600 dark:text-blue-600'>
+            <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500'>
               <TrendingUp size={18} />
               15%
             </span>
@@ -84,16 +76,16 @@ const DashboardPage = () => {
         </div>
         <div className='card'>
           <div className='card-header'>
-            <div className='rounded-lg bg-blue-500/20 p-2 text-blue-500 transition-colors dark:bg-blue-600/20 dark:text-blue-600'>
+            <div className='rounded-lg bg-blue-500/20 p-2 text-blue-500 transition-colors'>
               <CreditCard size={26} />
             </div>
             <p className='card-title'>Sales</p>
           </div>
-          <div className='card-body bg-slate-100 transition-colors dark:bg-slate-950'>
-            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>
+          <div className='card-body bg-slate-100 transition-colors'>
+            <p className='text-3xl font-bold text-slate-900 transition-colors'>
               12,340
             </p>
-            <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500 dark:border-blue-600 dark:text-blue-600'>
+            <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500'>
               <TrendingUp size={18} />
               19%
             </span>
@@ -127,13 +119,13 @@ const DashboardPage = () => {
                 <XAxis
                   dataKey='name'
                   strokeWidth={0}
-                  stroke={theme === 'light' ? '#475569' : '#94a3b8'}
+                  stroke={'#475569'}
                   tickMargin={6}
                 />
                 <YAxis
                   dataKey='total'
                   strokeWidth={0}
-                  stroke={theme === 'light' ? '#475569' : '#94a3b8'}
+                  stroke={'#475569'}
                   tickFormatter={(value) => `$${value}`}
                   tickMargin={6}
                 />
@@ -166,17 +158,11 @@ const DashboardPage = () => {
                     className='size-10 flex-shrink-0 rounded-full object-cover'
                   />
                   <div className='flex flex-col gap-y-2'>
-                    <p className='font-medium text-slate-900 dark:text-slate-50'>
-                      {sale.name}
-                    </p>
-                    <p className='text-sm text-slate-600 dark:text-slate-400'>
-                      {sale.email}
-                    </p>
+                    <p className='font-medium text-slate-900'>{sale.name}</p>
+                    <p className='text-sm text-slate-600'>{sale.email}</p>
                   </div>
                 </div>
-                <p className='font-medium text-slate-900 dark:text-slate-50'>
-                  ${sale.total}
-                </p>
+                <p className='font-medium text-slate-900'>${sale.total}</p>
               </div>
             ))}
           </div>
@@ -212,7 +198,7 @@ const DashboardPage = () => {
                         />
                         <div className='flex flex-col'>
                           <p>{product.name}</p>
-                          <p className='font-normal text-slate-600 dark:text-slate-400'>
+                          <p className='font-normal text-slate-600'>
                             {product.description}
                           </p>
                         </div>
@@ -231,7 +217,7 @@ const DashboardPage = () => {
                     </td>
                     <td className='table-cell'>
                       <div className='flex items-center gap-x-4'>
-                        <button className='text-blue-500 dark:text-blue-600'>
+                        <button className='text-blue-500'>
                           <PencilLine size={20} />
                         </button>
                         <button className='text-red-500'>
@@ -246,7 +232,6 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

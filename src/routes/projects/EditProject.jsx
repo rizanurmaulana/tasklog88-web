@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useTheme } from '../../hooks/use-theme';
-
-import { Footer } from '../../layouts/footer';
-
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
 const EditProject = () => {
   const { id } = useParams();
-  const { theme } = useTheme();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
   const token = localStorage.getItem('token');
 
   const [formData, setFormData] = useState({
@@ -19,10 +17,6 @@ const EditProject = () => {
     tgl_akhir_project: '',
     status_project: 'on going',
   });
-
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -36,7 +30,6 @@ const EditProject = () => {
         );
 
         const projectData = res.data.data.find((p) => p.id_project == id);
-        console.log(projectData);
         setFormData({
           nama_project: projectData.nama_project || '',
           tgl_mulai_project: projectData.tgl_mulai_project || '',
@@ -61,59 +54,53 @@ const EditProject = () => {
     }));
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage('');
+    setError('');
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setMessage('');
-  setError('');
+    try {
+      const res = await axios.put(
+        `http://localhost:9000/api/v1/projects/${id}`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
-  try {
-    const res = await axios.put(
-      `http://localhost:9000/api/v1/projects/${id}`,
-      formData,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Project berhasil diperbarui!',
+        timer: 2000,
+        showConfirmButton: false,
+      });
 
-    Swal.fire({
-      icon: 'success',
-      title: 'Berhasil!',
-      text: 'Project berhasil diperbarui!',
-      timer: 2000,
-      showConfirmButton: false,
-    });
-
-    console.log(res.data);
-    setTimeout(() => navigate(-1), 2000);
-  } catch (err) {
-    console.error('Error updating project:', err);
-    setError(err.response?.data?.message || 'Gagal memperbarui project');
-    Swal.fire({
-      icon: 'error',
-      title: 'Gagal!',
-      text: err.response?.data?.message || 'Gagal memperbarui project',
-    });
-  } finally {
-    setLoading(false);
-  }
-};
-
+      setTimeout(() => navigate(-1), 2000);
+    } catch (err) {
+      console.error('Error updating project:', err);
+      setError(err.response?.data?.message || 'Gagal memperbarui project');
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: err.response?.data?.message || 'Gagal memperbarui project',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
-        <h1 className='title'>Edit Projects</h1>
+        <h1 className='title'>Edit Project</h1>
       </div>
       <div className='card'>
         <div className='card-body p-0'>
           <form onSubmit={handleSubmit}>
             <div className='mb-4'>
-              <label
-                htmlFor='nama_project'
-                className='mb-2 block font-medium text-white'
-              >
+              <label htmlFor='nama_project' className='mb-2 block font-medium'>
                 Nama Project
               </label>
               <input
@@ -123,13 +110,13 @@ const handleSubmit = async (e) => {
                 placeholder='Nama Project'
                 value={formData.nama_project}
                 onChange={handleChange}
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
             <div className='mb-4'>
               <label
                 htmlFor='tgl_mulai_project'
-                className='mb-2 block font-medium text-white'
+                className='mb-2 block font-medium'
               >
                 Tanggal Mulai
               </label>
@@ -140,13 +127,13 @@ const handleSubmit = async (e) => {
                 value={formData.tgl_mulai_project}
                 onChange={handleChange}
                 required
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
             <div className='mb-4'>
               <label
                 htmlFor='tgl_akhir_project'
-                className='mb-2 block font-medium text-white'
+                className='mb-2 block font-medium'
               >
                 Tanggal Selesai
               </label>
@@ -157,13 +144,13 @@ const handleSubmit = async (e) => {
                 value={formData.tgl_akhir_project}
                 onChange={handleChange}
                 required
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
             <div className='mb-4'>
               <label
                 htmlFor='status_project'
-                className='mb-2 block font-medium text-white'
+                className='mb-2 block font-medium'
               >
                 Status
               </label>
@@ -172,7 +159,7 @@ const handleSubmit = async (e) => {
                 id='status_project'
                 value={formData.status_project}
                 onChange={handleChange}
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               >
                 <option value='on going'>On Going</option>
                 <option value='done'>Done</option>
@@ -182,12 +169,11 @@ const handleSubmit = async (e) => {
               type='submit'
               className='rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
             >
-              {loading ? 'Editing...' : 'Edit Projek'}
+              {loading ? 'Editing...' : 'Edit Project'}
             </button>
           </form>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

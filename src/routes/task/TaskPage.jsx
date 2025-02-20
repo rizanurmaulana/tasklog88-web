@@ -1,9 +1,10 @@
 import { useTheme } from '../../hooks/use-theme';
-import { PencilLine, SquarePlus } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { PencilLine, Search, SquarePlus } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
+import DataTable from 'react-data-table-component';
 
 const TaskPage = () => {
   const { theme } = useTheme();
@@ -13,6 +14,7 @@ const TaskPage = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const role = localStorage.getItem('role');
+  const [filterText, setFilterText] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,18 +38,125 @@ const TaskPage = () => {
     }
   }, [token]);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  };
+
+  const filteredData = useMemo(() => {
+    return data?.filter(
+      (task) =>
+        task.nama_task.toLowerCase().includes(filterText.toLowerCase()) ||
+        task.nama_project.toLowerCase().includes(filterText.toLowerCase()) ||
+        task.nama_lengkap.toLowerCase().includes(filterText.toLowerCase()),
+    );
+  }, [filterText, data]);
+
+  const columns = [
+    {
+      name: 'No',
+      selector: (row, index) => index + 1,
+      sortable: false,
+      width: '60px',
+      center: true,
+      cell: (row, index) => <div className='table-cell'>{index + 1}</div>,
+    },
+    {
+      name: 'Nama Tugas',
+      selector: (row) => row.nama_task,
+      sortable: true,
+      cell: (row) => <div className='table-cell'>{row.nama_task}</div>,
+    },
+    {
+      name: 'Nama Project',
+      selector: (row) => row.nama_project,
+      sortable: true,
+      cell: (row) => <div className='table-cell'>{row.nama_project}</div>,
+    },
+    {
+      name: 'Nama Peserta',
+      selector: (row) => row.nama_lengkap,
+      sortable: true,
+      width: '130px',
+      cell: (row) => <div className='table-cell'>{row.nama_lengkap}</div>,
+    },
+    {
+      name: 'Tanggal Mulai',
+      selector: (row) => formatDate(row.tgl_mulai_task),
+      sortable: true,
+      center: true,
+      width: '130px',
+      cell: (row) => (
+        <div className='table-cell'>{formatDate(row.tgl_mulai_task)}</div>
+      ),
+    },
+    {
+      name: 'Tanggal Selesai',
+      selector: (row) => formatDate(row.tgl_akhir_task),
+      sortable: true,
+      center: true,
+      width: '130px',
+      cell: (row) => (
+        <div className='table-cell'>{formatDate(row.tgl_akhir_task)}</div>
+      ),
+    },
+    {
+      name: 'Status',
+      selector: (row) => row.status_task,
+      sortable: true,
+      center: true,
+      width: '130px',
+      cell: (row) => (
+        <div
+          className={`rounded-full px-3 py-2 text-center font-medium capitalize text-white ${
+            row.status_task === 'on going'
+              ? 'bg-amber-500'
+              : row.status_task === 'done'
+                ? 'bg-green-500'
+                : 'bg-gray-400'
+          }`}
+        >
+          {row.status_task || 'Unknown'}
+        </div>
+      ),
+    },
+  ];
+
+  if (role === 'pendamping_lapangan' || role === 'peserta') {
+    columns.push({
+      name: 'Actions',
+      center: true,
+      cell: (row) => (
+        <Link
+          to={`edit/${row.id_task}`}
+          onClick={(event) => handleEdit(event, task.id_task)}
+          className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
+        >
+          <PencilLine size={20} /> Edit
+        </Link>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    });
+  }
+
   const handleEdit = (event, taskId) => {
     event.preventDefault(); // Mencegah navigasi otomatis
 
     Swal.fire({
-      title: "Apakah Anda yakin?",
-      text: "Anda akan mengubah data proyek ini!",
-      icon: "warning",
+      title: 'Apakah Anda yakin?',
+      text: 'Anda akan mengubah data proyek ini!',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Edit",
-      cancelButtonText: "Batal"
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Edit',
+      cancelButtonText: 'Batal',
     }).then((result) => {
       if (result.isConfirmed) {
         navigate(`edit/${taskId}`); // Pindah ke halaman edit jika dikonfirmasi
@@ -59,73 +168,39 @@ const TaskPage = () => {
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
         <h1 className='title'>Tasks</h1>
-        {role === 'pendamping_lapangan' && (
-          <Link
-            to='add'
-            className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
-          >
-            <SquarePlus /> Add Task
-          </Link>
-        )}
+        <div className='flex gap-x-4'>
+          <div className='input'>
+            <Search size={20} className='text-slate-300' />
+            <input
+              type='text'
+              name='search'
+              id='search'
+              placeholder='Search...'
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              className='w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300'
+            />
+          </div>
+          {role === 'pendamping_lapangan' && (
+            <Link
+              to='add'
+              className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
+            >
+              <SquarePlus /> Add Task
+            </Link>
+          )}
+        </div>
       </div>
       <div className='card'>
         <div className='card-body p-0'>
-          <div className='relative max-h-[500px] w-full flex-shrink-0 overflow-auto rounded-none [scrollbar-width:_thin]'>
-            <table className='table'>
-              <thead className='table-header'>
-                <tr className='table-row'>
-                  <th className='table-head'>#</th>
-                  <th className='table-head'>Nama Task</th>
-                  <th className='table-head'>Nama Project</th>
-                  <th className='table-head'>Nama User</th>
-                  <th className='table-head'>Tanggal Mulai</th>
-                  <th className='table-head'>Tanggal Selesai</th>
-                  <th className='table-head'>Status</th>
-                  {(role === 'pendamping_lapangan' || role === 'peserta') && (
-                    <th className='table-head'>Actions</th>
-                  )}
-                </tr>
-              </thead>
-              <tbody className='table-body'>
-                {data.map((task, index) => (
-                  <tr key={task.id_task} className='table-row'>
-                    <td className='table-cell'>{index + 1}</td>
-                    <td className='table-cell'>{task.nama_task}</td>
-                    <td className='table-cell'>{task.nama_project}</td>
-                    <td className='table-cell'>{task.nama_lengkap}</td>
-                    <td className='table-cell'>{task.tgl_mulai_task}</td>
-                    <td className='table-cell'>{task.tgl_akhir_task}</td>
-                    <td className='table-cell'>
-                      <div
-                        className={`flex w-fit items-center justify-center rounded-full px-3 py-1 ${task.status_task === 'on going'
-                            ? 'bg-blue-500'
-                            : task.status_task === 'done'
-                              ? 'bg-green-500'
-                              : ''
-                          }`}
-                      >
-                        {task.status_task || 'unknown'}
-                      </div>
-                    </td>
-                    {(role === 'pendamping_lapangan' || role === 'peserta') && (
-                      <td className='table-cell'>
-                        <div className='flex items-center'>
-                          <Link
-                            to={`edit/${task.id_task}`}
-                            onClick={(event) => handleEdit(event, task.id_task)}
-                            className='flex items-center gap-x-2 text-blue-500 dark:text-white'
-                          >
-                            <PencilLine size={20} />
-                            Edit
-                          </Link>
-                        </div>
-                      </td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            columns={columns}
+            data={filteredData}
+            progressPending={loading}
+            pagination
+            highlightOnHover
+            striped
+          />
         </div>
       </div>
     </div>
