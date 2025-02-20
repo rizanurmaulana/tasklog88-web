@@ -1,16 +1,14 @@
 import { useState } from 'react';
-import { useTheme } from '../../hooks/use-theme';
-
-import { Footer } from '../../layouts/footer';
-
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-
 const AddProject = () => {
-  const { theme } = useTheme();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const token = localStorage.getItem('token');
 
   const [formData, setFormData] = useState({
     nama_project: '',
@@ -18,12 +16,6 @@ const AddProject = () => {
     tgl_akhir_project: '',
     status_project: 'on going',
   });
-
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-
-  const token = localStorage.getItem('token');
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -44,7 +36,7 @@ const AddProject = () => {
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       Swal.fire({
@@ -55,7 +47,6 @@ const AddProject = () => {
         showConfirmButton: false,
       });
 
-      console.log(res.data);
       setTimeout(() => navigate(-1), 2000);
     } catch (err) {
       console.error('Error creating project:', err);
@@ -71,21 +62,16 @@ const AddProject = () => {
     }
   };
 
-
-
   return (
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
-        <h1 className='title'>Add Projects</h1>
+        <h1 className='title'>Add Project</h1>
       </div>
       <div className='card'>
         <div className='card-body p-0'>
           <form action='' onSubmit={handleSubmit}>
             <div className='mb-4'>
-              <label
-                htmlFor='nama_project'
-                className='mb-2 block font-medium text-white'
-              >
+              <label htmlFor='nama_project' className='mb-2 block font-medium'>
                 Nama Project
               </label>
               <input
@@ -96,13 +82,13 @@ const AddProject = () => {
                 value={formData.nama_project}
                 onChange={handleChange}
                 required
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
             <div className='mb-4'>
               <label
                 htmlFor='tgl_mulai_project'
-                className='mb-2 block font-medium text-white'
+                className='mb-2 block font-medium'
               >
                 Tanggal Mulai
               </label>
@@ -113,13 +99,13 @@ const AddProject = () => {
                 value={formData.tgl_mulai_project}
                 onChange={handleChange}
                 required
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
             <div className='mb-4'>
               <label
                 htmlFor='tgl_akhir_project'
-                className='mb-2 block font-medium text-white'
+                className='mb-2 block font-medium'
               >
                 Tanggal Selesai
               </label>
@@ -130,13 +116,13 @@ const AddProject = () => {
                 value={formData.tgl_akhir_project}
                 onChange={handleChange}
                 required
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
             <div className='mb-4'>
               <label
                 htmlFor='tgl_akhir_project'
-                className='mb-2 block font-medium text-white'
+                className='mb-2 block font-medium'
               >
                 Status
               </label>
@@ -145,7 +131,7 @@ const AddProject = () => {
                 id='status_project'
                 value={formData.status_project}
                 onChange={handleChange}
-                className='w-full rounded-lg border border-slate-300 bg-slate-900 px-3 py-2 text-white outline-none dark:border-slate-700'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               >
                 <option value='on going'>On Going</option>
                 <option value='done'>Done</option>
@@ -155,12 +141,11 @@ const AddProject = () => {
               type='submit'
               className='rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
             >
-              {loading ? 'Submitting...' : 'Tambah Projects'}
+              {loading ? 'Submitting...' : 'Tambah Project'}
             </button>
           </form>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

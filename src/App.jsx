@@ -62,6 +62,7 @@ function App() {
         { path: 'dashboard', element: <DashboardPage /> },
         { path: 'projects', element: <ProjectsPage /> },
         { path: 'task', element: <TaskPage /> },
+        { path: 'user', element: <UserPage /> },
       ],
     },
   ]);

@@ -1,18 +1,18 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Swal from "sweetalert2";
+import { useState, useEffect, useMemo } from 'react';
+import Swal from 'sweetalert2';
 import axios from 'axios';
-import { useTheme } from '../../hooks/use-theme';
-import { PencilLine, SquarePlus } from 'lucide-react';
+import { PencilLine, Search, SquarePlus } from 'lucide-react';
+import DataTable from 'react-data-table-component';
 
 const ProjectsPage = () => {
-  const { theme } = useTheme();
-  const navigate = useNavigate(); // Tambahkan useNavigate()
-
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
+  const [filterText, setFilterText] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,9 +22,15 @@ const ProjectsPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setData(res.data);
+
+        if (Array.isArray(res.data.project?.data)) {
+          setData(res.data.project.data);
+        } else {
+          setData([]);
+        }
       } catch (error) {
         setError(error.message);
+        setData([]);
       } finally {
         setLoading(false);
       }
@@ -47,18 +53,100 @@ const ProjectsPage = () => {
     });
   };
 
+  const filteredData = useMemo(() => {
+    return data?.filter((project) =>
+      project.nama_project.toLowerCase().includes(filterText.toLowerCase()),
+    );
+  }, [filterText, data]);
+
+  const columns = [
+    {
+      name: 'No',
+      selector: (row, index) => index + 1,
+      sortable: false,
+      width: '60px',
+      center: true,
+      cell: (row, index) => <div className='table-cell'>{index + 1}</div>,
+    },
+    {
+      name: 'Nama Project',
+      selector: (row) => row.nama_project,
+      sortable: true,
+      cell: (row) => <div className='table-cell'>{row.nama_project}</div>,
+    },
+    {
+      name: 'Tanggal Mulai',
+      selector: (row) => formatDate(row.tgl_mulai_project),
+      sortable: true,
+      center: true,
+      width: '200px',
+      cell: (row) => (
+        <div className='table-cell'>{formatDate(row.tgl_mulai_project)}</div>
+      ),
+    },
+    {
+      name: 'Tanggal Selesai',
+      selector: (row) => formatDate(row.tgl_akhir_project),
+      sortable: true,
+      center: true,
+      width: '200px',
+      cell: (row) => (
+        <div className='table-cell'>{formatDate(row.tgl_akhir_project)}</div>
+      ),
+    },
+    {
+      name: 'Status',
+      selector: (row) => row.status_project,
+      sortable: true,
+      center: true,
+      width: '200px',
+      cell: (row) => (
+        <div
+          className={`rounded-full px-3 py-2 text-center font-medium capitalize text-white ${
+            row.status_project === 'on going'
+              ? 'bg-amber-500'
+              : row.status_project === 'done'
+                ? 'bg-green-500'
+                : 'bg-gray-400'
+          }`}
+        >
+          {row.status_project || 'Unknown'}
+        </div>
+      ),
+    },
+  ];
+
+  if (role === 'pendamping_lapangan' || role === 'peserta') {
+    columns.push({
+      name: 'Actions',
+
+      cell: (row) => (
+        <Link
+          to={`edit/${row.id_project}`}
+          onClick={(event) => handleEdit(event, project.id_project)}
+          className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
+        >
+          <PencilLine size={20} /> Edit
+        </Link>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    });
+  }
+
   const handleEdit = (event, projectId) => {
     event.preventDefault(); // Mencegah navigasi otomatis
 
     Swal.fire({
-      title: "Apakah Anda yakin?",
-      text: "Anda akan mengubah data proyek ini!",
-      icon: "warning",
+      title: 'Apakah Anda yakin?',
+      text: 'Anda akan mengubah data proyek ini!',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Edit",
-      cancelButtonText: "Batal"
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Edit',
+      cancelButtonText: 'Batal',
     }).then((result) => {
       if (result.isConfirmed) {
         navigate(`edit/${projectId}`); // Pindah ke halaman edit jika dikonfirmasi
@@ -66,93 +154,43 @@ const ProjectsPage = () => {
     });
   };
 
-  const role = localStorage.getItem('role');
-
   return (
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
         <h1 className='title'>Projects</h1>
-        {role === 'pendamping_lapangan' && (
-          <Link
-            to='add'
-            className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
-          >
-            <SquarePlus /> Add Project
-          </Link>
-        )}
+        <div className='flex gap-x-4'>
+          <div className='input'>
+            <Search size={20} className='text-slate-300' />
+            <input
+              type='text'
+              name='search'
+              id='search'
+              placeholder='Search...'
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              className='w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300'
+            />
+          </div>
+          {role === 'pendamping_lapangan' && (
+            <Link
+              to='add'
+              className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
+            >
+              <SquarePlus /> Add Project
+            </Link>
+          )}
+        </div>
       </div>
       <div className='card'>
         <div className='card-body p-0'>
-          <div className='relative max-h-[500px] w-full flex-shrink-0 overflow-auto rounded-none [scrollbar-width:_thin]'>
-            <table className='table'>
-              <thead className='table-header'>
-                <tr className='table-row'>
-                  <th className='table-head'>#</th>
-                  <th className='table-head'>Nama Project</th>
-                  <th className='table-head'>Tanggal Mulai</th>
-                  <th className='table-head'>Tanggal Selesai</th>
-                  <th className='table-head'>Status</th>
-                  {(role === 'pendamping_lapangan' || role === 'peserta') && (
-                    <th className='table-head'>Actions</th>
-                  )}
-                </tr>
-              </thead>
-              <tbody className='table-body'>
-                {data?.project?.data && data.project.data.length > 0 ? (
-                  data.project.data.map((project, index) => (
-                    <tr
-                      key={project.id || `project-${index}`}
-                      className='table-row'
-                    >
-                      <td className='table-cell'>{index + 1}</td>
-                      <td className='table-cell'>
-                        <div className='flex w-max gap-x-4'>
-                          <p>{project.nama_project}</p>
-                        </div>
-                      </td>
-                      <td className='table-cell'>
-                        {formatDate(project.tgl_mulai_project) || 'N/A'}
-                      </td>
-                      <td className='table-cell'>
-                        {formatDate(project.tgl_akhir_project) || 'N/A'}
-                      </td>
-                      <td className='table-cell'>
-                        <div
-                          className={`flex w-fit items-center justify-center rounded-full px-3 py-1 capitalize ${
-                            project.status_project === 'on going'
-                              ? 'bg-blue-500 text-white'
-                              : project.status_project === 'done'
-                                ? 'bg-green-500 text-white'
-                                : ''
-                          }`}
-                        >
-                          {project.status_project || 'Unknown'}
-                        </div>
-                      </td>
-                      <td className='table-cell'>
-                        <div className='flex items-center'>
-                          <Link
-                            to={`edit/${project.id_project}`}
-                            onClick={(event) => handleEdit(event, project.id_project)}
-                            className='flex items-center gap-x-2 text-blue-500 dark:text-white'
-                          >
-                            <PencilLine size={20} />
-                            Edit
-                          </Link>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={6} className='py-4 text-center'>
-                      No data available
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            columns={columns}
+            data={filteredData}
+            progressPending={loading}
+            pagination
+            highlightOnHover
+            striped
+          />
         </div>
       </div>
     </div>
