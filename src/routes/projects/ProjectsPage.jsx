@@ -111,7 +111,7 @@ const ProjectsPage = () => {
     },
   ];
 
-  if (role === 'pendamping_lapangan' || role === 'peserta') {
+  if (role === 'pendamping_lapangan' ) {
     columns.push({
       name: 'Actions',
       cell: (row) => (
