@@ -10,41 +10,41 @@ const AddUser = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
 
   const [formData, setFormData] = useState({
-    nama_project: '',
-    tgl_mulai_project: '',
-    tgl_akhir_project: '',
-    status_project: 'on going',
+    username: '',
+    role: '',
+    nama_lengkap: '',
   });
 
   useEffect(() => {
     const fetchUser = async () => {
+      if (!id) return;
       setLoading(true);
       try {
-        const res = await axios.get(
-          `http://localhost:9000/api/v1/users/${id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
-
-        const userData = res.data.data;
-        console.log(res.data.data);
-        setFormData({
-          username: userData.username || '',
-          role: userData.role || '',
-          nama_lengkap: userData.nama_lengkap || '',
+        const res = await axios.get(`http://localhost:9000/api/v1/users/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
+
+        if (res.data && res.data.data) {
+          setFormData({
+            username: res.data.data.username || '',
+            role: res.data.data.role || '',
+            nama_lengkap: res.data.data.nama_lengkap || '',
+          });
+        } else {
+          setError('User data not found');
+        }
       } catch (err) {
-        console.error('Error fetching project:', err);
-        setError('Failed to load project data');
+        setError(err.response?.data?.message || 'Gagal mengambil data user');
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) fetchUser();
+    fetchUser();
   }, [id, token]);
 
   const handleChange = (e) => {
@@ -61,113 +61,146 @@ const AddUser = () => {
     setError('');
 
     try {
-      const res = await axios.put(
-        `http://localhost:9000/api/v1/users/${id}`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      await axios.put(`http://localhost:9000/api/v1/users/${id}`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       Swal.fire({
         icon: 'success',
         title: 'Berhasil!',
-        text: 'Project berhasil diperbarui!',
+        text: 'User berhasil diperbarui!',
         timer: 2000,
         showConfirmButton: false,
       });
 
-      console.log(res.data);
       setTimeout(() => navigate(-1), 2000);
     } catch (err) {
-      console.error('Error updating project:', err);
-      setError(err.response?.data?.message || 'Gagal memperbarui project');
+      setError(err.response?.data?.message || 'Gagal memperbarui user');
       Swal.fire({
         icon: 'error',
         title: 'Gagal!',
-        text: err.response?.data?.message || 'Gagal memperbarui project',
+        text: err.response?.data?.message || 'Gagal memperbarui user',
       });
     } finally {
       setLoading(false);
     }
   };
 
+  const handleChangePassword = async () => {
+    if (!newPassword) {
+      Swal.fire('Gagal!', 'Password tidak boleh kosong', 'error');
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/api/v1/users/password/${id}`,
+        { password: newPassword },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log('Response:', response); // Debugging
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Password berhasil diubah!',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      setIsModalOpen(false);
+      setNewPassword('');
+    } catch (err) {
+      console.error('Error:', err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: err.response?.data?.message || 'Gagal mengganti password',
+      });
+    }
+  };
+
   return (
     <div className='flex flex-col gap-y-4'>
-      <div className='flex items-center justify-between'>
-        <h1 className='title'>Edit User</h1>
-      </div>
+      <h1 className='title'>Edit User</h1>
+      {error && <p className='text-red-500'>{error}</p>}
       <div className='card'>
         <div className='card-body p-0'>
-          <form action='' onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <div className='mb-4'>
-              <label htmlFor='username' className='mb-2 block font-medium'>
-                Username
-              </label>
+              <label className='mb-2 block font-medium'>Username</label>
               <input
                 type='text'
-                id='username'
                 name='username'
-                placeholder='Username'
                 value={formData.username}
                 onChange={handleChange}
                 required
-                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
+                className='w-full border px-3 py-2 rounded-lg outline-none'
               />
             </div>
 
             <div className='mb-4'>
-              <label
-                htmlFor='tgl_akhir_project'
-                className='mb-2 block font-medium'
-              >
-                Role
-              </label>
+              <label className='mb-2 block font-medium'>Role</label>
               <select
                 name='role'
-                id='role'
                 value={formData.role}
                 onChange={handleChange}
-                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
+                className='w-full border px-3 py-2 rounded-lg outline-none'
               >
-                <option disabled>-- Pilih --</option>
+                <option value='' disabled>-- Pilih --</option>
                 <option value='peserta'>Peserta</option>
                 <option value='pendamping_lapangan'>Pendamping Lapangan</option>
                 <option value='pendamping_kampus'>Pendamping Kampus</option>
               </select>
             </div>
+
             <div className='mb-4'>
-              <label htmlFor='nama_lengkap' className='mb-2 block font-medium'>
-                Nama Lengkap
-              </label>
+              <label className='mb-2 block font-medium'>Nama Lengkap</label>
               <input
                 type='text'
-                id='nama_lengkap'
                 name='nama_lengkap'
-                placeholder='nama_lengkap'
                 value={formData.nama_lengkap}
                 onChange={handleChange}
                 required
-                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
+                className='w-full border px-3 py-2 rounded-lg outline-none'
               />
             </div>
+
             <div className='flex gap-2'>
-              <button
-                type='submit'
-                className='rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
-              >
-                {loading ? 'Submitting...' : 'Simpan'}
+              <button type='submit' className='bg-blue-500 text-white px-3 py-2 rounded-lg' disabled={loading}>
+                {loading ? 'Memproses...' : 'Simpan'}
               </button>
-              <Link
-                to='ubah'
-                className='rounded-lg bg-orange-500 px-3 py-2 font-medium text-white'
+              <button
+                type='button'
+                className='bg-orange-500 text-white px-3 py-2 rounded-lg'
+                onClick={() => setIsModalOpen(true)}
               >
                 Ganti Password
-              </Link>
+              </button>
             </div>
           </form>
         </div>
       </div>
+
+      {isModalOpen && (
+        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+          <div className='bg-white p-5 rounded-lg w-96'>
+            <h2 className='text-xl mb-4'>Ganti Password</h2>
+            <input
+              type='password'
+              placeholder='Masukkan password baru'
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className='w-full border px-3 py-2 rounded-lg outline-none mb-3'
+            />
+            <div className='flex justify-end gap-2'>
+              <button className='bg-red-500 text-white px-3 py-2 rounded-lg' onClick={() => setIsModalOpen(false)}>Batal</button>
+              <button className='bg-blue-500 text-white px-3 py-2 rounded-lg' onClick={handleChangePassword}>Simpan</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

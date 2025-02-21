@@ -130,7 +130,7 @@ const AddUser = () => {
                 onChange={handleChange}
                 className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               >
-                <option disabled>-- Pilih Role --</option>
+                <option disabled value=''>-- Pilih Role --</option>
                 <option value='peserta'>Peserta</option>
                 <option value='pendamping_lapangan'>Pendamping Lapangan</option>
                 <option value='pendamping_kampus'>Pendamping Kampus</option>

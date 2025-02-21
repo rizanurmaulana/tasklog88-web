@@ -119,11 +119,10 @@ const ProjectsPage = () => {
   if (role === 'pendamping_lapangan' || role === 'peserta') {
     columns.push({
       name: 'Actions',
-
       cell: (row) => (
         <Link
           to={`edit/${row.id_project}`}
-          onClick={(event) => handleEdit(event, project.id_project)}
+          onClick={(event) => handleEdit(event, row.id_project)}
           className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
         >
           <PencilLine size={20} /> Edit
@@ -134,10 +133,10 @@ const ProjectsPage = () => {
       button: true,
     });
   }
-
+  
   const handleEdit = (event, projectId) => {
     event.preventDefault(); // Mencegah navigasi otomatis
-
+  
     Swal.fire({
       title: 'Apakah Anda yakin?',
       text: 'Anda akan mengubah data proyek ini!',
@@ -153,6 +152,7 @@ const ProjectsPage = () => {
       }
     });
   };
+  
 
   return (
     <div className='flex flex-col gap-y-4'>

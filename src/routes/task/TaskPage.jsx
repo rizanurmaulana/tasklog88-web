@@ -133,7 +133,7 @@ const TaskPage = () => {
       cell: (row) => (
         <Link
           to={`edit/${row.id_task}`}
-          onClick={(event) => handleEdit(event, task.id_task)}
+          onClick={(event) => handleEdit(event, row.id_task)} // Perbaikan disini
           className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
         >
           <PencilLine size={20} /> Edit
@@ -144,25 +144,26 @@ const TaskPage = () => {
       button: true,
     });
   }
-
+  
   const handleEdit = (event, taskId) => {
     event.preventDefault(); // Mencegah navigasi otomatis
-
+  
     Swal.fire({
       title: 'Apakah Anda yakin?',
-      text: 'Anda akan mengubah data proyek ini!',
+      text: 'Anda akan mengubah data tugas ini!', // Mengubah teks agar lebih sesuai
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Edit',
       cancelButtonText: 'Batal',
-    }).then((result) => {
-      if (result.isConfirmed) {
+    }).then(({ isConfirmed }) => {
+      if (isConfirmed) {
         navigate(`edit/${taskId}`); // Pindah ke halaman edit jika dikonfirmasi
       }
     });
   };
+  
 
   return (
     <div className='flex flex-col gap-y-4'>

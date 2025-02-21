@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import taskLogo from '../../../public/logo-tasklog88.svg';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -67,11 +68,18 @@ const Login = () => {
   return (
     <div className='flex min-h-screen items-center justify-center'>
       <div className='card w-96'>
+        <div className='flex justify-center'>
+          <div className='flex flex-col items-center'>
+          <img src={taskLogo} alt='Logoipsum' className='h-10 w-10' />
+          
+          </div>
+        </div>
+        
         <div className='card-body p-0'>
           <h2 className='mb-4 text-center text-2xl font-semibold text-slate-800'>
             Login
           </h2>
-
+          
           <form onSubmit={handleLogin}>
             <div className='mb-4'>
               <label
