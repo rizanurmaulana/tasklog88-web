@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -13,12 +13,13 @@ const PengerjaanPage = () => {
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
   const [filterText, setFilterText] = useState('');
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          'http://localhost:9000/api/v1/pengerjaans',
+          `http://localhost:9000/api/v1/pengerjaans/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -26,8 +27,8 @@ const PengerjaanPage = () => {
           },
         );
 
-        console.log(res.data.data.result);
-        setData(res.data.data.result);
+        console.log(res.data.data);
+        setData(res.data.data);
       } catch (error) {
         setError(error.message);
         setData([]);
@@ -44,11 +45,11 @@ const PengerjaanPage = () => {
     }
   }, [token]);
 
-  const filteredData = useMemo(() => {
-    return data?.filter((pengerjaan) =>
-      pengerjaan.nama_task.toLowerCase().includes(filterText.toLowerCase()),
-    );
-  }, [filterText, data]);
+  //   const filteredData = useMemo(() => {
+  //     return data?.filter((pengerjaan) =>
+  //       pengerjaan.nama_task.toLowerCase().includes(filterText.toLowerCase()),
+  //     );
+  //   }, [filterText, data]);
 
   const columns = [
     {
