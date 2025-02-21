@@ -82,8 +82,8 @@ const UserPage = () => {
       name: 'Actions',
       cell: (row) => (
         <Link
-          to={`edit/${row.id_project}`}
-          onClick={(event) => handleEdit(event, project.id_project)}
+          to={`edit/${row.id_user}`}
+          onClick={(event) => handleEdit(event, row.id_user)} // Perbaikan disini
           className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
         >
           <PencilLine size={20} /> Edit
@@ -94,10 +94,10 @@ const UserPage = () => {
       button: true,
     });
   }
-
-  const handleEdit = (event, userId) => {
+  
+  const handleEdit = (event, projectId) => { // Mengganti userId menjadi projectId
     event.preventDefault();
-
+  
     Swal.fire({
       title: 'Apakah Anda yakin?',
       text: 'Anda akan mengubah data proyek ini!',
@@ -107,12 +107,13 @@ const UserPage = () => {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Edit',
       cancelButtonText: 'Batal',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate(`edit/${userId}`);
+    }).then(({ isConfirmed }) => {
+      if (isConfirmed) {
+        navigate(`edit/${projectId}`); // Menggunakan projectId yang benar
       }
     });
   };
+  
 
   return (
     <div className='flex flex-col gap-y-4'>
