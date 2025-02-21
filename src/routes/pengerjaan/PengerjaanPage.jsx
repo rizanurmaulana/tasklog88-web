@@ -8,7 +8,7 @@ import DataTable from 'react-data-table-component';
 const PengerjaanPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [data, setData] = useState([]); // Tetap pakai array agar DataTable bisa berfungsi
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterText, setFilterText] = useState('');
@@ -17,23 +17,24 @@ const PengerjaanPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!token) {
+        setError('No token found');
+        setLoading(false);
+        return;
+      }
       try {
-        const res = await axios.get(
-          `http://localhost:9000/api/v1/pengerjaans/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get(`http://localhost:9000/api/v1/pengerjaans/tasks/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-        console.log('Data dari API:', res.data.data); // Debugging
+        console.log('Response dari API:', res.data);
 
-        // Jika API mengembalikan objek, ubah menjadi array agar bisa masuk ke DataTable
-        if (res.data.data && typeof res.data.data === 'object') {
-          setData([res.data.data]); // Bungkus objek ke dalam array
+        if (Array.isArray(res.data.data)) {
+          setData(res.data.data);
+        } else if (res.data.data && typeof res.data.data === 'object') {
+          setData([res.data.data]);
         } else {
-          console.error('Error: Data yang diterima bukan objek!', res.data.data);
+          console.error('Data yang diterima tidak sesuai format:', res.data);
           setData([]);
         }
       } catch (error) {
@@ -45,85 +46,45 @@ const PengerjaanPage = () => {
       }
     };
 
-    if (token) {
-      fetchData();
-    } else {
-      setError('No token found');
-      setLoading(false);
-    }
-  }, [token, id]);
+    fetchData();
+  }, [id, token]);
+
+  const filteredData = data.filter((item) =>
+    item.nama_task?.toLowerCase().includes(filterText.toLowerCase())
+  );
 
   const columns = [
-    {
-      name: 'No',
-      selector: (row, index) => index + 1,
-      sortable: 'false',
-      width: '60px',
-      center: 'true',
-      cell: (row, index) => <div className='table-cell'>{index + 1}</div>,
-    },
-    {
-      name: 'Nama Tugas',
-      selector: (row) => row.nama_task || '-',
-      sortable: 'true',
-      cell: (row) => <div className='table-cell'>{row.nama_task || '-'}</div>,
-    },
+    { name: 'No', selector: (_, index) => index + 1, width: '60px', center: true },
+    { name: 'Nama Tugas', selector: (row) => row.nama_task || '-', sortable: true },
     {
       name: 'File Github',
       selector: (row) => row.file_github || '-',
-      sortable: 'true',
-      center: 'true',
-      cell: (row) => (
-        <div className='table-cell'>
-          <a href={row.file_github} target="_blank" rel="noopener noreferrer" className="text-blue-500">
-            {row.file_github || '-'}
-          </a>
-        </div>
-      ),
+      center: true,
+      cell: (row) => row.file_github ? <a href={row.file_github} target='_blank' rel='noopener noreferrer' className='text-blue-500'>{row.file_github}</a> : '-'
     },
     {
       name: 'File SS',
       selector: (row) => row.file_ss || '-',
-      sortable: 'true',
-      center: 'true',
-      cell: (row) => (
-        <div className='table-cell'>
-          <a href={row.file_ss} target="_blank" rel="noopener noreferrer" className="text-blue-500">
-            {row.file_ss || '-'}
-          </a>
-        </div>
-      ),
+      center: true,
+      cell: (row) => row.file_ss ? <a href={row.file_ss} target='_blank' rel='noopener noreferrer' className='text-blue-500'>{row.file_ss}</a> : '-'
     },
     {
       name: 'Status',
       selector: (row) => row.status_task || 'Unknown',
-      sortable: 'true',
-      center: 'true',
-      width: '200px',
+      center: true,
       cell: (row) => (
-        <div
-          className={`rounded-full px-3 py-2 text-center font-medium capitalize text-white ${
-            row.status_task === 'on going'
-              ? 'bg-amber-500'
-              : row.status_task === 'done'
-                ? 'bg-green-500'
-                : 'bg-gray-400'
-          }`}
-        >
-          {row.status_task || 'Unknown'}
-        </div>
-      ),
-    },
+        <div className={`rounded-full px-3 py-2 text-white ${row.status_task === 'on going' ? 'bg-amber-500' : row.status_task === 'done' ? 'bg-green-500' : 'bg-gray-400'}`}>{row.status_task || 'Unknown'}</div>
+      )
+    }
   ];
 
   const handleEdit = (event, projectId) => {
     event.preventDefault();
-
     Swal.fire({
       title: 'Apakah Anda yakin?',
       text: 'Anda akan mengubah data proyek ini!',
       icon: 'warning',
-      showCancelButton: 'true',
+      showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Edit',
@@ -144,8 +105,6 @@ const PengerjaanPage = () => {
             <Search size={20} className='text-slate-300' />
             <input
               type='text'
-              name='search'
-              id='search'
               placeholder='Search...'
               value={filterText}
               onChange={(e) => setFilterText(e.target.value)}
@@ -153,10 +112,7 @@ const PengerjaanPage = () => {
             />
           </div>
           {role === 'pendamping_lapangan' && (
-            <Link
-              to='add'
-              className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
-            >
+            <Link to='add' className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 text-white'>
               <SquarePlus /> Add Pengerjaan
             </Link>
           )}
@@ -166,7 +122,7 @@ const PengerjaanPage = () => {
         <div className='card-body p-0'>
           <DataTable
             columns={columns}
-            data={data} // Pastikan data dalam bentuk array
+            data={filteredData}
             progressPending={loading}
             pagination
             highlightOnHover
