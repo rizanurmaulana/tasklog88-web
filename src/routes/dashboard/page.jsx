@@ -17,7 +17,7 @@ const DashboardPage = () => {
             Authorization: `Bearer: ${token}`,
           },
         });
-        setTotalProject(res.data.project.totalData);
+        setTotalProject(res.data.totalData);
       } catch (error) {
         console.error('Error fetching total project:', error);
       }
@@ -33,7 +33,7 @@ const DashboardPage = () => {
           Authorization: `Bearer: ${token}`,
         },
       });
-      setTotalTask(res.data.data.total);
+      setTotalTask(res.data.total);
     };
 
     fetchTotalTask();
@@ -46,7 +46,7 @@ const DashboardPage = () => {
           Authorization: `Bearer: ${token}`,
         },
       });
-      setTotalPengerjaan(res.data.data.total);
+      setTotalPengerjaan(res.data.total);
     };
 
     fetchTotalPengerjaan();
@@ -59,7 +59,7 @@ const DashboardPage = () => {
           Authorization: `Bearer: ${token}`,
         },
       });
-      setTotalUser(res.data.project.totalData);
+      setTotalUser(res.data.totalData);
     };
 
     fetchTotalUser();

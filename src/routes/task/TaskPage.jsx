@@ -22,7 +22,7 @@ const TaskPage = () => {
         const res = await axios.get('http://localhost:9000/api/v1/tasks', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setData(res.data.data.data);
+        setData(res.data.data);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -60,35 +60,35 @@ const TaskPage = () => {
     {
       name: 'No',
       selector: (row, index) => index + 1,
-      sortable: false,
+      sortable: 'false',
       width: '60px',
-      center: true,
+      center: 'true',
       cell: (row, index) => <div className='table-cell'>{index + 1}</div>,
     },
     {
       name: 'Nama Tugas',
       selector: (row) => row.nama_task,
-      sortable: true,
+      sortable: 'true',
       cell: (row) => <div className='table-cell'>{row.nama_task}</div>,
     },
     {
       name: 'Nama Project',
       selector: (row) => row.nama_project,
-      sortable: true,
+      sortable: 'true',
       cell: (row) => <div className='table-cell'>{row.nama_project}</div>,
     },
     {
       name: 'Nama Peserta',
       selector: (row) => row.nama_lengkap,
-      sortable: true,
+      sortable: 'true',
       width: '130px',
       cell: (row) => <div className='table-cell'>{row.nama_lengkap}</div>,
     },
     {
       name: 'Tanggal Mulai',
       selector: (row) => formatDate(row.tgl_mulai_task),
-      sortable: true,
-      center: true,
+      sortable: 'true',
+      center: 'true',
       width: '130px',
       cell: (row) => (
         <div className='table-cell'>{formatDate(row.tgl_mulai_task)}</div>
@@ -97,8 +97,8 @@ const TaskPage = () => {
     {
       name: 'Tanggal Selesai',
       selector: (row) => formatDate(row.tgl_akhir_task),
-      sortable: true,
-      center: true,
+      sortable: 'true',
+      center: 'true',
       width: '130px',
       cell: (row) => (
         <div className='table-cell'>{formatDate(row.tgl_akhir_task)}</div>
@@ -107,8 +107,8 @@ const TaskPage = () => {
     {
       name: 'Status',
       selector: (row) => row.status_task,
-      sortable: true,
-      center: true,
+      sortable: 'true',
+      center: 'true',
       width: '130px',
       cell: (row) => (
         <div
@@ -129,7 +129,7 @@ const TaskPage = () => {
   if (role === 'pendamping_lapangan' || role === 'peserta') {
     columns.push({
       name: 'Actions',
-      center: true,
+      center: 'true',
       width: '200px',
       cell: (row) => (
         <div className='flex gap-2'>
@@ -149,9 +149,9 @@ const TaskPage = () => {
           </button>
         </div>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
+      ignoreRowClick: 'true',
+      allowoverflow: 'true',
+      button: 'true',
     });
   }
 

@@ -62,7 +62,7 @@ const EditTask = () => {
       const res = await axios.get('http://localhost:9000/api/v1/users', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setUsers(res.data.project.data); // Pastikan API mereturn data array
+      setUsers(res.data.data); // Pastikan API mereturn data array
     } catch (error) {
       console.error('Error fetching users:', error);
       setError('Gagal mengambil data pengguna.');
@@ -74,7 +74,7 @@ const EditTask = () => {
       const res = await axios.get('http://localhost:9000/api/v1/projects', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setProjects(res.data.project.data); // Pastikan API mereturn data array
+      setProjects(res.data.data); // Pastikan API mereturn data array
     } catch (error) {
       console.error('Error fetching projects:', error);
       setError('Gagal mengambil data proyek.');
