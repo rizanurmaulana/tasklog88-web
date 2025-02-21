@@ -14,6 +14,8 @@ import Login from './routes/auth/Login';
 import UserPage from './routes/user/UserPage';
 import AddUser from './routes/user/AddUser';
 import EditUser from './routes/user/EditUser';
+import TaskPageById from './routes/task/TaskPageById';
+import PengerjaanPage from './routes/pengerjaan/PengerjaanPage';
 
 function App() {
   const router = createBrowserRouter([
@@ -30,8 +32,9 @@ function App() {
         { path: 'dashboard', element: <DashboardPage /> },
         { path: 'projects', element: <ProjectsPage /> },
         { path: 'projects/edit', element: <EditProject /> },
-        { path: 'task', element: <TaskPage /> },
+        { path: 'task', element: <TaskPageById /> },
         { path: 'task/edit', element: <EditTask /> },
+        { path: 'task/pengerjaan', element: <PengerjaanPage /> },
       ],
     },
     {
@@ -46,6 +49,7 @@ function App() {
         { path: 'task', element: <TaskPage /> },
         { path: 'task/add', element: <AddTask /> },
         { path: 'task/edit/:id', element: <EditTask /> },
+        { path: 'task/:id', element: <PengerjaanPage /> },
         { path: 'user', element: <UserPage /> },
         { path: 'user/add', element: <AddUser /> },
         { path: 'user/edit/:id', element: <EditUser /> },

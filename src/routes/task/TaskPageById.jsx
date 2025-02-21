@@ -1,12 +1,12 @@
 import { useTheme } from '../../hooks/use-theme';
-import { NotebookTabs, PencilLine, Search, SquarePlus } from 'lucide-react';
+import { PencilLine, Search, SquarePlus } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import DataTable from 'react-data-table-component';
 
-const TaskPage = () => {
+const TaskPageById = () => {
   const { theme } = useTheme();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +19,7 @@ const TaskPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:9000/api/v1/tasks', {
+        const res = await axios.get('http://localhost:9000/api/v1/tasks/user', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setData(res.data.data.data);
@@ -78,13 +78,6 @@ const TaskPage = () => {
       cell: (row) => <div className='table-cell'>{row.nama_project}</div>,
     },
     {
-      name: 'Nama Peserta',
-      selector: (row) => row.nama_lengkap,
-      sortable: true,
-      width: '130px',
-      cell: (row) => <div className='table-cell'>{row.nama_lengkap}</div>,
-    },
-    {
       name: 'Tanggal Mulai',
       selector: (row) => formatDate(row.tgl_mulai_task),
       sortable: true,
@@ -130,24 +123,14 @@ const TaskPage = () => {
     columns.push({
       name: 'Actions',
       center: true,
-      width: '200px',
       cell: (row) => (
-        <div className='flex gap-2'>
-          <Link
-            to={`${row.id_task}`}
-            className='flex items-center gap-x-2 rounded-lg bg-teal-500 px-3 py-2 font-medium text-white hover:bg-teal-600'
-          >
-            <NotebookTabs size={16} />
-            Detail
-          </Link>
-          <button
-            onClick={(event) => handleEdit(event, row.id_task)}
-            className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
-          >
-            <PencilLine size={16} />
-            Edit
-          </button>
-        </div>
+        <Link
+          to={`edit/${row.id_task}`}
+          onClick={(event) => handleEdit(event, row.id_task)} // Perbaikan disini
+          className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
+        >
+          <PencilLine size={20} /> Edit
+        </Link>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
@@ -217,4 +200,4 @@ const TaskPage = () => {
   );
 };
 
-export default TaskPage;
+export default TaskPageById;
