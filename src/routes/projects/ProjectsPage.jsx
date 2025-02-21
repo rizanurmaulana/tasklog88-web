@@ -22,12 +22,7 @@ const ProjectsPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
-        if (Array.isArray(res.data.project?.data)) {
-          setData(res.data.project.data);
-        } else {
-          setData([]);
-        }
+          setData(res.data.data);
       } catch (error) {
         setError(error.message);
         setData([]);
@@ -63,22 +58,22 @@ const ProjectsPage = () => {
     {
       name: 'No',
       selector: (row, index) => index + 1,
-      sortable: false,
+      sortable: 'false',
       width: '60px',
-      center: true,
+      center: 'true',
       cell: (row, index) => <div className='table-cell'>{index + 1}</div>,
     },
     {
       name: 'Nama Project',
       selector: (row) => row.nama_project,
-      sortable: true,
+      sortable: 'true',
       cell: (row) => <div className='table-cell'>{row.nama_project}</div>,
     },
     {
       name: 'Tanggal Mulai',
       selector: (row) => formatDate(row.tgl_mulai_project),
-      sortable: true,
-      center: true,
+      sortable: 'true',
+      center: 'true',
       width: '200px',
       cell: (row) => (
         <div className='table-cell'>{formatDate(row.tgl_mulai_project)}</div>
@@ -87,8 +82,8 @@ const ProjectsPage = () => {
     {
       name: 'Tanggal Selesai',
       selector: (row) => formatDate(row.tgl_akhir_project),
-      sortable: true,
-      center: true,
+      sortable: 'true',
+      center: 'true',
       width: '200px',
       cell: (row) => (
         <div className='table-cell'>{formatDate(row.tgl_akhir_project)}</div>
@@ -97,8 +92,8 @@ const ProjectsPage = () => {
     {
       name: 'Status',
       selector: (row) => row.status_project,
-      sortable: true,
-      center: true,
+      sortable: 'true',
+      center: 'true',
       width: '200px',
       cell: (row) => (
         <div
@@ -128,9 +123,9 @@ const ProjectsPage = () => {
           <PencilLine size={20} /> Edit
         </Link>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
+      ignoreRowClick: 'true',
+      allowoverflow: 'true',
+      button: 'true',
     });
   }
   
