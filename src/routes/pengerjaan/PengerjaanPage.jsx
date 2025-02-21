@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { Search, SquarePlus } from 'lucide-react';
@@ -7,13 +7,13 @@ import DataTable from 'react-data-table-component';
 
 const PengerjaanPage = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
+  const { id } = useParams();
+  const [data, setData] = useState([]); // Tetap pakai array agar DataTable bisa berfungsi
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filterText, setFilterText] = useState('');
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
-  const [filterText, setFilterText] = useState('');
-  const { id } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,12 +24,20 @@ const PengerjaanPage = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
 
-        console.log(res.data.data);
-        setData(res.data.data);
+        console.log('Data dari API:', res.data.data); // Debugging
+
+        // Jika API mengembalikan objek, ubah menjadi array agar bisa masuk ke DataTable
+        if (res.data.data && typeof res.data.data === 'object') {
+          setData([res.data.data]); // Bungkus objek ke dalam array
+        } else {
+          console.error('Error: Data yang diterima bukan objek!', res.data.data);
+          setData([]);
+        }
       } catch (error) {
+        console.error('Error mengambil data:', error);
         setError(error.message);
         setData([]);
       } finally {
@@ -43,48 +51,54 @@ const PengerjaanPage = () => {
       setError('No token found');
       setLoading(false);
     }
-  }, [token]);
-
-  //   const filteredData = useMemo(() => {
-  //     return data?.filter((pengerjaan) =>
-  //       pengerjaan.nama_task.toLowerCase().includes(filterText.toLowerCase()),
-  //     );
-  //   }, [filterText, data]);
+  }, [token, id]);
 
   const columns = [
     {
       name: 'No',
       selector: (row, index) => index + 1,
-      sortable: false,
+      sortable: 'false',
       width: '60px',
-      center: true,
+      center: 'true',
       cell: (row, index) => <div className='table-cell'>{index + 1}</div>,
     },
     {
       name: 'Nama Tugas',
-      selector: (row) => row.nama_task,
-      sortable: true,
-      cell: (row) => <div className='table-cell'>{row.nama_task}</div>,
+      selector: (row) => row.nama_task || '-',
+      sortable: 'true',
+      cell: (row) => <div className='table-cell'>{row.nama_task || '-'}</div>,
     },
     {
       name: 'File Github',
-      selector: (row) => row.file_github,
-      sortable: true,
-      center: true,
-      cell: (row) => <div className='table-cell'>{row.file_github}</div>,
+      selector: (row) => row.file_github || '-',
+      sortable: 'true',
+      center: 'true',
+      cell: (row) => (
+        <div className='table-cell'>
+          <a href={row.file_github} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+            {row.file_github || '-'}
+          </a>
+        </div>
+      ),
     },
     {
       name: 'File SS',
-      selector: (row) => row.file_ss,
-      sortable: true,
-      center: true,
-      cell: (row) => <div className='table-cell'>{row.file_ss}</div>,
+      selector: (row) => row.file_ss || '-',
+      sortable: 'true',
+      center: 'true',
+      cell: (row) => (
+        <div className='table-cell'>
+          <a href={row.file_ss} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+            {row.file_ss || '-'}
+          </a>
+        </div>
+      ),
     },
     {
       name: 'Status',
-      selector: (row) => row.status_task,
-      sortable: true,
-      center: true,
+      selector: (row) => row.status_task || 'Unknown',
+      sortable: 'true',
+      center: 'true',
       width: '200px',
       cell: (row) => (
         <div
@@ -103,20 +117,20 @@ const PengerjaanPage = () => {
   ];
 
   const handleEdit = (event, projectId) => {
-    event.preventDefault(); // Mencegah navigasi otomatis
+    event.preventDefault();
 
     Swal.fire({
       title: 'Apakah Anda yakin?',
       text: 'Anda akan mengubah data proyek ini!',
       icon: 'warning',
-      showCancelButton: true,
+      showCancelButton: 'true',
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Edit',
       cancelButtonText: 'Batal',
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate(`edit/${projectId}`); // Pindah ke halaman edit jika dikonfirmasi
+        navigate(`edit/${projectId}`);
       }
     });
   };
@@ -124,7 +138,7 @@ const PengerjaanPage = () => {
   return (
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
-        <h1 className='title'>Projects</h1>
+        <h1 className='title'>Pengerjaan</h1>
         <div className='flex gap-x-4'>
           <div className='input'>
             <Search size={20} className='text-slate-300' />
@@ -152,7 +166,7 @@ const PengerjaanPage = () => {
         <div className='card-body p-0'>
           <DataTable
             columns={columns}
-            data={data}
+            data={data} // Pastikan data dalam bentuk array
             progressPending={loading}
             pagination
             highlightOnHover
