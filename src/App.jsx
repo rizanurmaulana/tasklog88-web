@@ -35,8 +35,8 @@ function App() {
         { path: 'projects/edit', element: <EditProject /> },
         { path: 'task', element: <TaskPageById /> },
         { path: 'task/edit/:id', element: <EditTask /> },
-        { path: 'task/:id', element: <AddPengerjaan /> },
-        { path: 'pengerjaan/add/:id', element: <AddPengerjaan /> },
+        { path: 'task/:id', element: <PengerjaanPage /> },
+        { path: 'task/:id/add', element: <AddPengerjaan /> },
       ],
     },
     {
