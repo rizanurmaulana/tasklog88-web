@@ -51,6 +51,10 @@ const AddPengerjaan = () => {
           file_github: null,
           file_ss: null,
           status_task: pengerjaanData.status_task || '',
+          status_task: pengerjaanData.status_task || '',
+          catatan: pengerjaanData.catatan || '',
+          jenis_catatan: pengerjaanData.jenis_catatan || '',
+          tgl_pengerjaan: pengerjaanData.tgl_pengerjaan || '',
         });
       } catch (err) {
         setError('Gagal mengambil data pengerjaan');
@@ -148,7 +152,7 @@ const AddPengerjaan = () => {
                 name='nama_task'
                 value={formData.nama_task}
                 disabled
-                className='w-full cursor-not-allowed rounded-lg border border-slate-300 px-3 py-2 outline-none'
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
 
@@ -189,7 +193,9 @@ const AddPengerjaan = () => {
                 id='catatan'
                 name='catatan'
                 value={formData.catatan}
-                className='w-full cursor-not-allowed rounded-lg border border-slate-300 px-3 py-2 outline-none'
+                onChange={handleChange}
+                required
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
 
@@ -202,7 +208,9 @@ const AddPengerjaan = () => {
                 id='jenis_catatan'
                 name='jenis_catatan'
                 value={formData.jenis_catatan}
-                className='w-full cursor-not-allowed rounded-lg border border-slate-300 px-3 py-2 outline-none'
+                onChange={handleChange}
+                required
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
 
@@ -218,7 +226,9 @@ const AddPengerjaan = () => {
                 id='tgl_pengerjaan'
                 name='tgl_pengerjaan'
                 value={formData.tgl_pengerjaan}
-                className='w-full cursor-not-allowed rounded-lg border border-slate-300 px-3 py-2 outline-none'
+                onChange={handleChange}
+                required
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
 

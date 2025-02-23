@@ -23,9 +23,12 @@ const PengerjaanPage = () => {
         return;
       }
       try {
-        const res = await axios.get(`http://localhost:9000/api/v1/pengerjaans/tasks/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          `http://localhost:9000/api/v1/pengerjaans/tasks/${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
 
         console.log('Response dari API:', res.data);
 
@@ -50,31 +53,68 @@ const PengerjaanPage = () => {
   }, [id, token]);
 
   const filteredData = data.filter((item) =>
-    item.nama_task?.toLowerCase().includes(filterText.toLowerCase())
+    item.nama_task?.toLowerCase().includes(filterText.toLowerCase()),
   );
 
   const columns = [
-    { name: 'No', selector: (_, index) => index + 1, width: '60px', center: true },
-    { name: 'Nama Tugas', selector: (row) => row.nama_task || '-', sortable: true },
+    {
+      name: 'No',
+      selector: (_, index) => index + 1,
+      width: '60px',
+      center: true,
+    },
+    {
+      name: 'Nama Tugas',
+      selector: (row) => row.nama_task || '-',
+      sortable: true,
+    },
     {
       name: 'File Github',
       selector: (row) => row.file_github || '-',
       center: true,
-      cell: (row) => row.file_github ? <a href={row.file_github} target='_blank' rel='noopener noreferrer' className='text-blue-500'>{row.file_github}</a> : '-'
+      cell: (row) =>
+        row.file_github ? (
+          <a
+            href={row.file_github}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-blue-500'
+          >
+            {row.file_github}
+          </a>
+        ) : (
+          '-'
+        ),
     },
     {
       name: 'File SS',
       selector: (row) => row.file_ss || '-',
       center: true,
-      cell: (row) => row.file_ss ? <a href={row.file_ss} target='_blank' rel='noopener noreferrer' className='text-blue-500'>{row.file_ss}</a> : '-'
+      cell: (row) =>
+        row.file_ss ? (
+          <a
+            href={row.file_ss}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-blue-500'
+          >
+            {row.file_ss}
+          </a>
+        ) : (
+          '-'
+        ),
     },
     {
       name: 'Status',
       selector: (row) => row.status_task || 'Unknown',
       center: true,
       cell: (row) => (
-        <div className={`rounded-full px-3 py-2 text-white ${row.status_task === 'on going' ? 'bg-amber-500' : row.status_task === 'done' ? 'bg-green-500' : 'bg-gray-400'}`}>{row.status_task || 'Unknown'}</div>
-      )
+        <div
+          className={`rounded-full px-3 py-2 font-medium capitalize text-white ${row.status_task === 'on going' ? 'bg-amber-500' : row.status_task === 'done' ? 'bg-green-500' : 'bg-gray-400'}`}
+        >
+          {row.status_task || 'Unknown'}
+        </div>
+      ),
     },
     {
       name: 'Action',
@@ -82,14 +122,14 @@ const PengerjaanPage = () => {
       center: true,
       cell: (row) => (
         <Link
-            to={`${row.id_pengerjaan}`}
-            className='flex items-center gap-x-2 rounded-lg bg-teal-500 px-3 py-2 font-medium text-white hover:bg-teal-600'
-          >
-            <NotebookTabs size={16} />
-            Log
-          </Link>
-      )
-    }
+          to={`${row.id_pengerjaan}`}
+          className='flex items-center gap-x-2 rounded-lg bg-teal-500 px-3 py-2 font-medium text-white hover:bg-teal-600'
+        >
+          <NotebookTabs size={16} />
+          Log Pengerjaan
+        </Link>
+      ),
+    },
   ];
 
   const handleEdit = (event, projectId) => {
@@ -125,8 +165,11 @@ const PengerjaanPage = () => {
               className='w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300'
             />
           </div>
-          {role === 'pendamping_lapangan' && (
-            <Link to='add' className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 text-white'>
+          {(role === 'pendamping_lapangan' || role === 'peserta') && (
+            <Link
+              to='add'
+              className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 text-white'
+            >
               <SquarePlus /> Add Pengerjaan
             </Link>
           )}

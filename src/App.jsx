@@ -17,6 +17,8 @@ import EditUser from './routes/user/EditUser';
 import TaskPageById from './routes/task/TaskPageById';
 import PengerjaanPage from './routes/pengerjaan/PengerjaanPage';
 import AddPengerjaan from './routes/pengerjaan/AddPengerjaan';
+import LogPengerjaanPage from './routes/log/LogPengerjaanPage';
+import AddLogPengerjaan from './routes/log/AddLogPengerjaan';
 
 function App() {
   const router = createBrowserRouter([
@@ -37,6 +39,8 @@ function App() {
         { path: 'task/edit/:id', element: <EditTask /> },
         { path: 'task/:id', element: <PengerjaanPage /> },
         { path: 'task/:id/add', element: <AddPengerjaan /> },
+        { path: 'task/:id/:id', element: <LogPengerjaanPage /> },
+        { path: 'task/:id/:id/add', element: <AddLogPengerjaan /> },
       ],
     },
     {
