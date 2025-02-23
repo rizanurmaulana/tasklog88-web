@@ -31,14 +31,21 @@ const AddPengerjaan = () => {
                 );
 
                 console.log('Response dari API:', res.data);
-                
+
                 if (!res.data || !res.data.data) {
                     console.error('Data tidak ditemukan dalam response API.');
                     setError('Task tidak ditemukan');
                     return;
                 }
 
-                const pengerjaanData = res.data.data.find((p) => String(p.id_task) === String(id));
+                const responseData = res.data.data;
+
+                let pengerjaanData;
+                if (Array.isArray(responseData)) {
+                    pengerjaanData = responseData.find((p) => String(p.id_task) === String(id));
+                } else {
+                    pengerjaanData = responseData; // Jika responseData adalah objek langsung
+                }
 
                 if (!pengerjaanData) {
                     console.error('Task tidak ditemukan dalam response API.');
@@ -93,7 +100,7 @@ const AddPengerjaan = () => {
         try {
             console.log('Mengirim data:', formDataToSend);
             const res = await axios.put(
-                `http://localhost:9000/api/v1/pengerjaans/${id}`,
+                `http://localhost:9000/api/v1/pengerjaans`,
                 formDataToSend,
                 {
                     headers: {

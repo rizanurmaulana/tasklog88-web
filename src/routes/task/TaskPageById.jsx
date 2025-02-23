@@ -125,16 +125,12 @@ const TaskPageById = () => {
       center: true,
       cell: (row) => (
         <Link
-          to={`/pengerjaan/${row.id_task}`}
-          className="flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-teal-600"
-          onClick={(e) => {
-            e.stopPropagation(); // Mencegah event dari mempengaruhi elemen lain
-            console.log(`Navigating to: /pengerjaan/${row.id_task}`); // Debugging
-          }}
-        >
-          <SquarePlus />
-          Add
-        </Link>
+            to={`${row.id_task}`}
+            className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
+          >
+            <SquarePlus />
+            Add
+          </Link>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
