@@ -122,28 +122,29 @@ const TaskPageById = () => {
   if (role === 'pendamping_lapangan' || role === 'peserta') {
     columns.push({
       name: 'Actions',
-      center: 'true',
+      center: true,
       cell: (row) => (
         <Link
-          to={`edit/${row.id_task}`}
-          onClick={(event) => handleEdit(event, row.id_task)} // Perbaikan disini
-          className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
-        >
-          <PencilLine size={20} /> Edit
-        </Link>
+            to={`${row.id_task}`}
+            className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
+          >
+            <SquarePlus />
+            Add
+          </Link>
       ),
-      ignoreRowClick: 'true',
-      allowoverflow: 'true',
-      button: 'true',
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
     });
   }
+
 
   const handleEdit = (event, taskId) => {
     event.preventDefault(); // Mencegah navigasi otomatis
 
     Swal.fire({
       title: 'Apakah Anda yakin?',
-      text: 'Anda akan mengubah data tugas ini!', // Mengubah teks agar lebih sesuai
+      text: 'add pengerjaan!', // Mengubah teks agar lebih sesuai
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -152,7 +153,7 @@ const TaskPageById = () => {
       cancelButtonText: 'Batal',
     }).then(({ isConfirmed }) => {
       if (isConfirmed) {
-        navigate(`edit/${taskId}`); // Pindah ke halaman edit jika dikonfirmasi
+        navigate(`add/${taskId}`); // Pindah ke halaman edit jika dikonfirmasi
       }
     });
   };
