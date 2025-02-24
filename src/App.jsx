@@ -17,6 +17,8 @@ import EditUser from './routes/user/EditUser';
 import TaskPageById from './routes/task/TaskPageById';
 import PengerjaanPage from './routes/pengerjaan/PengerjaanPage';
 import AddPengerjaan from './routes/pengerjaan/AddPengerjaan';
+import LogPengerjaanPage from './routes/log/LogPengerjaanPage';
+import AddLogPengerjaan from './routes/log/AddLogPengerjaan';
 
 function App() {
   const router = createBrowserRouter([
@@ -37,6 +39,8 @@ function App() {
         { path: 'task/edit/:id', element: <EditTask /> },
         { path: 'task/:id', element: <PengerjaanPage /> },
         { path: 'task/:id/add', element: <AddPengerjaan /> },
+        { path: 'task/:taskId/:id', element: <LogPengerjaanPage /> },
+        { path: 'task/:id/:id/add', element: <AddLogPengerjaan /> },
       ],
     },
     {
@@ -52,6 +56,7 @@ function App() {
         { path: 'task/add', element: <AddTask /> },
         { path: 'task/edit/:id', element: <EditTask /> },
         { path: 'task/:id', element: <PengerjaanPage /> },
+        { path: 'task/:taskId/:id', element: <LogPengerjaanPage /> },
         { path: 'user', element: <UserPage /> },
         { path: 'user/add', element: <AddUser /> },
         { path: 'user/edit/:id', element: <EditUser /> },
@@ -66,6 +71,8 @@ function App() {
         { path: 'dashboard', element: <DashboardPage /> },
         { path: 'projects', element: <ProjectsPage /> },
         { path: 'task', element: <TaskPage /> },
+        { path: 'task/:id', element: <PengerjaanPage /> },
+        { path: 'task/:taskId/:id', element: <LogPengerjaanPage /> },
         { path: 'user', element: <UserPage /> },
       ],
     },

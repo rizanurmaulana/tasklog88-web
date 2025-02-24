@@ -1,5 +1,11 @@
 import { useTheme } from '../../hooks/use-theme';
-import { PencilLine, Search, SquarePlus } from 'lucide-react';
+import {
+  NotebookPen,
+  PencilLine,
+  ScrollText,
+  Search,
+  SquarePlus,
+} from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -122,22 +128,22 @@ const TaskPageById = () => {
   if (role === 'pendamping_lapangan' || role === 'peserta') {
     columns.push({
       name: 'Actions',
-      center: true,
+      center: 'true',
+      width: '200px',
       cell: (row) => (
         <Link
-            to={`${row.id_task}`}
-            className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
-          >
-            <SquarePlus />
-            Add
-          </Link>
+          to={`${row.id_task}`}
+          className='flex items-center gap-x-2 rounded-lg bg-teal-500 px-3 py-2 font-medium text-white hover:bg-teal-600'
+        >
+          <NotebookPen size={16} />
+        Pengerjaan
+        </Link>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
+      ignoreRowClick: 'true',
+      allowOverflow: 'true',
+      button: 'true',
     });
   }
-
 
   const handleEdit = (event, taskId) => {
     event.preventDefault(); // Mencegah navigasi otomatis

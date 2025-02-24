@@ -120,7 +120,7 @@ const ProjectsPage = () => {
           onClick={(event) => handleEdit(event, row.id_project)}
           className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
         >
-          <PencilLine size={20} /> Edit
+          <PencilLine size={16} /> Edit
         </Link>
       ),
       ignoreRowClick: 'true',

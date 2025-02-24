@@ -26,7 +26,7 @@ const AddTask = () => {
       const res = await axios.get('http://localhost:9000/api/v1/users', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setUsers(res.data.project.data); // Pastikan API mereturn data array
+      setUsers(res.data.data);
     } catch (error) {
       console.error('Error fetching users:', error);
       setError('Gagal mengambil data pengguna.');
@@ -38,7 +38,7 @@ const AddTask = () => {
       const res = await axios.get('http://localhost:9000/api/v1/projects', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setProjects(res.data.project.data); // Pastikan API mereturn data array
+      setProjects(res.data.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
       setError('Gagal mengambil data proyek.');
@@ -80,7 +80,6 @@ const AddTask = () => {
         showConfirmButton: false,
       });
 
-      console.log(res.data);
       setTimeout(() => navigate(-1), 2000);
     } catch (err) {
       console.error('Error creating project:', err);
