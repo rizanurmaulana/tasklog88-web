@@ -303,6 +303,8 @@ const AddPengerjaan = () => {
           nama_task: pengerjaanData.nama_task || '',
           file_github: null,
           file_ss: null,
+          status_task: pengerjaanData.status_task || '',
+          status_task: pengerjaanData.status_task || '',
           catatan: pengerjaanData.catatan || '',
           jenis_catatan: pengerjaanData.jenis_catatan || '',
           tgl_pengerjaan: pengerjaanData.tgl_pengerjaan || '',
@@ -399,6 +401,20 @@ const AddPengerjaan = () => {
           {error && <p className='text-red-500'>{error}</p>}
           <form onSubmit={handleSubmit}>
             <div className='mb-4'>
+              <label htmlFor='nama_task' className='mb-2 block font-medium'>
+                Nama Task
+              </label>
+              <input
+                type='text'
+                id='nama_task'
+                name='nama_task'
+                value={formData.nama_task}
+                disabled
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
+              />
+            </div>
+
+            <div className='mb-4'>
               <label htmlFor='file_github' className='mb-2 block font-medium'>
                 File Github (Max 1MB)
               </label>
@@ -420,6 +436,54 @@ const AddPengerjaan = () => {
                 type='file'
                 id='file_ss'
                 name='file_ss'
+                onChange={handleChange}
+                required
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
+              />
+            </div>
+
+            <div className='mb-4'>
+              <label htmlFor='catatan' className='mb-2 block font-medium'>
+                Catatan
+              </label>
+              <input
+                type='text'
+                id='catatan'
+                name='catatan'
+                value={formData.catatan}
+                onChange={handleChange}
+                required
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
+              />
+            </div>
+
+            <div className='mb-4'>
+              <label htmlFor='jenis_catatan' className='mb-2 block font-medium'>
+                Jenis Catatan
+              </label>
+              <input
+                type='text'
+                id='jenis_catatan'
+                name='jenis_catatan'
+                value={formData.jenis_catatan}
+                onChange={handleChange}
+                required
+                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
+              />
+            </div>
+
+            <div className='mb-4'>
+              <label
+                htmlFor='tgl_pengerjaan'
+                className='mb-2 block font-medium'
+              >
+                Tanggal Pengerjaan
+              </label>
+              <input
+                type='date'
+                id='tgl_pengerjaan'
+                name='tgl_pengerjaan'
+                value={formData.tgl_pengerjaan}
                 onChange={handleChange}
                 required
                 className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
