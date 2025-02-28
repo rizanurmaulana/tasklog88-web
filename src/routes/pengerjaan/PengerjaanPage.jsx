@@ -105,20 +105,8 @@ const PengerjaanPage = () => {
         ),
     },
     {
-      name: 'Status',
-      selector: (row) => row.status_task || 'Unknown',
-      center: true,
-      cell: (row) => (
-        <div
-          className={`rounded-full px-3 py-2 font-medium capitalize text-white ${row.status_task === 'on going' ? 'bg-amber-500' : row.status_task === 'done' ? 'bg-green-500' : 'bg-gray-400'}`}
-        >
-          {row.status_task || 'Unknown'}
-        </div>
-      ),
-    },
-    {
       name: 'Action',
-      selector: (row) => row.status_task || 'Unknown',
+      selector: (row) => row.id_pengerjaan || '',
       center: true,
       cell: (row) => (
         <Link
@@ -165,7 +153,7 @@ const PengerjaanPage = () => {
               className='w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300'
             />
           </div>
-          {(role === 'pendamping_lapangan' || role === 'peserta') && (
+          {role === 'peserta' && (
             <Link
               to='add'
               className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 text-white'

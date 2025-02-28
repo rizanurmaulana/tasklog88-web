@@ -7,8 +7,9 @@ import DataTable from 'react-data-table-component';
 
 const LogPengerjaanPage = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id, taskId } = useParams();
   const [data, setData] = useState([]);
+  const [namaTask, setNamaTask] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterText, setFilterText] = useState('');
@@ -48,6 +49,26 @@ const LogPengerjaanPage = () => {
     };
 
     fetchData();
+  }, [id, token]);
+
+  useEffect(() => {
+    const fetchNamaTask = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:9000/api/v1/tasks/${taskId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        console.log(taskId);
+        console.log(res.data.data.nama_task);
+        setNamaTask(res.data.data.nama_task);
+      } catch (error) {}
+    };
+
+    fetchNamaTask();
   }, [id, token]);
 
   const filteredData = data.filter((item) =>
@@ -96,7 +117,7 @@ const LogPengerjaanPage = () => {
   return (
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
-        <h1 className='title'>Pengerjaan</h1>
+        <h1 className='title'>Log Pengerjaan</h1>
         <div className='flex gap-x-4'>
           <div className='input'>
             <Search size={20} className='text-slate-300' />
@@ -108,7 +129,7 @@ const LogPengerjaanPage = () => {
               className='w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300'
             />
           </div>
-          {(role === 'pendamping_lapangan' || role === 'peserta') && (
+          {role === 'peserta' && (
             <Link
               to='add'
               className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 text-white'

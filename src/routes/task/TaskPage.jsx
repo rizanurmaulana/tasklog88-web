@@ -126,20 +126,21 @@ const TaskPage = () => {
     },
   ];
 
-  if (role === 'pendamping_lapangan' || role === 'peserta') {
-    columns.push({
-      name: 'Actions',
-      center: 'true',
-      width: '200px',
-      cell: (row) => (
-        <div className='flex gap-2'>
-          <Link
-            to={`${row.id_task}`}
-            className='flex items-center gap-x-2 rounded-lg bg-teal-500 px-3 py-2 font-medium text-white hover:bg-teal-600'
-          >
-            <NotebookTabs size={16} />
-            Detail
-          </Link>
+  columns.push({
+    name: 'Actions',
+    center: true,
+    width: '200px',
+    cell: (row) => (
+      <div className='flex gap-2'>
+        <Link
+          to={`${row.id_task}`}
+          className='flex items-center gap-x-2 rounded-lg bg-teal-500 px-3 py-2 font-medium text-white hover:bg-teal-600'
+        >
+          <NotebookTabs size={16} />
+          Detail
+        </Link>
+
+        {(role === 'pendamping_lapangan' || role === 'peserta') && (
           <button
             onClick={(event) => handleEdit(event, row.id_task)}
             className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
@@ -147,13 +148,13 @@ const TaskPage = () => {
             <PencilLine size={16} />
             Edit
           </button>
-        </div>
-      ),
-      ignoreRowClick: 'true',
-      allowoverflow: 'true',
-      button: 'true',
-    });
-  }
+        )}
+      </div>
+    ),
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+  });
 
   const handleEdit = (event, taskId) => {
     event.preventDefault(); // Mencegah navigasi otomatis
