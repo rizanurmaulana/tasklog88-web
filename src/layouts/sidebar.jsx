@@ -45,6 +45,8 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
   ];
 
   const handleLogout = () => {
+    localStorage.removeItem('id_user');
+    localStorage.removeItem('nama_lengkap');
     localStorage.removeItem('token');
     localStorage.removeItem('role');
 
