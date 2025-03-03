@@ -19,6 +19,7 @@ import PengerjaanPage from './routes/pengerjaan/PengerjaanPage';
 import AddPengerjaan from './routes/pengerjaan/AddPengerjaan';
 import LogPengerjaanPage from './routes/log/LogPengerjaanPage';
 import AddLogPengerjaan from './routes/log/AddLogPengerjaan';
+import DashboardUser from './routes/dashboard/DashboardUser';
 
 function App() {
   const router = createBrowserRouter([
@@ -31,8 +32,8 @@ function App() {
       path: '/peserta',
       element: <Layout />,
       children: [
-        { index: true, element: <DashboardPage /> },
-        { path: 'dashboard', element: <DashboardPage /> },
+        { index: true, element: <DashboardUser /> },
+        { path: 'dashboard', element: <DashboardUser /> },
         { path: 'projects', element: <ProjectsPage /> },
         { path: 'projects/edit', element: <EditProject /> },
         { path: 'task', element: <TaskPageById /> },

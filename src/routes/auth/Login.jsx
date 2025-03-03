@@ -28,6 +28,8 @@ const Login = () => {
 
     try {
       const res = await axios.post(`${API_BASE_URL}/api/v1/login`, formData);
+      localStorage.setItem('id_user', res.data.data.id_user);
+      localStorage.setItem('nama_lengkap', res.data.data.nama_lengkap);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('role', res.data.data.role);
 
@@ -70,16 +72,15 @@ const Login = () => {
       <div className='card w-96'>
         <div className='flex justify-center'>
           <div className='flex flex-col items-center'>
-          <img src={taskLogo} alt='Logoipsum' className='h-10 w-10' />
-          
+            <img src={taskLogo} alt='Logoipsum' className='h-10 w-10' />
           </div>
         </div>
-        
+
         <div className='card-body p-0'>
           <h2 className='mb-4 text-center text-2xl font-semibold text-slate-800'>
             Login
           </h2>
-          
+
           <form onSubmit={handleLogin}>
             <div className='mb-4'>
               <label
