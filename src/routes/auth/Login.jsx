@@ -12,6 +12,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const handleChange = (e) => {
     setFormData({
@@ -19,7 +20,6 @@ const Login = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const handleLogin = async (e) => {
     e.preventDefault();

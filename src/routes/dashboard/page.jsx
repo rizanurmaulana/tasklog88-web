@@ -8,11 +8,12 @@ const DashboardPage = () => {
   const [totalTask, setTotalTask] = useState(0);
   const [totalPengerjaan, setTotalPengerjaan] = useState(0);
   const [totalUser, setTotalUser] = useState(0);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchTotalProject = async () => {
       try {
-        const res = await axios.get('http://localhost:9000/api/v1/projects', {
+        const res = await axios.get(`${API_BASE_URL}/api/v1/projects`, {
           headers: {
             Authorization: `Bearer: ${token}`,
           },
@@ -28,7 +29,7 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const fetchTotalTask = async () => {
-      const res = await axios.get('http://localhost:9000/api/v1/tasks', {
+      const res = await axios.get(`${API_BASE_URL}/api/v1/tasks`, {
         headers: {
           Authorization: `Bearer: ${token}`,
         },
@@ -41,7 +42,7 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const fetchTotalPengerjaan = async () => {
-      const res = await axios.get('http://localhost:9000/api/v1/pengerjaans', {
+      const res = await axios.get(`${API_BASE_URL}/api/v1/pengerjaans`, {
         headers: {
           Authorization: `Bearer: ${token}`,
         },
@@ -54,7 +55,7 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const fetchTotalUser = async () => {
-      const res = await axios.get('http://localhost:9000/api/v1/users', {
+      const res = await axios.get(`${API_BASE_URL}/api/v1/users`, {
         headers: {
           Authorization: `Bearer: ${token}`,
         },

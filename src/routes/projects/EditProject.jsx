@@ -10,6 +10,7 @@ const EditProject = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [formData, setFormData] = useState({
     nama_project: '',
@@ -22,12 +23,9 @@ const EditProject = () => {
     const fetchProject = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(
-          `http://localhost:9000/api/v1/projects/${id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
+        const res = await axios.get(`${API_BASE_URL}/api/v1/projects/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         const projectData = res.data.data.find((p) => p.id_project == id);
         setFormData({
@@ -62,7 +60,7 @@ const EditProject = () => {
 
     try {
       const res = await axios.put(
-        `http://localhost:9000/api/v1/projects/${id}`,
+        `${API_BASE_URL}/api/v1/projects/${id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
