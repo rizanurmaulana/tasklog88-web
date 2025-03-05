@@ -1,11 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { ListCollapse, PencilLine, Search, SquarePlus } from 'lucide-react';
+import { PencilLine, Search, SquarePlus } from 'lucide-react';
 import DataTable from 'react-data-table-component';
 
-const ProjectsPage = () => {
+const DetailProject = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,13 +14,13 @@ const ProjectsPage = () => {
   const role = localStorage.getItem('role');
   const [filterText, setFilterText] = useState('');
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const id_user = localStorage.getItem('id_user');
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `${API_BASE_URL}/api/v1/projects/user/${id_user}`,
+          `${API_BASE_URL}/api/v1/tasks/project/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -64,7 +64,7 @@ const ProjectsPage = () => {
       name: 'No',
       selector: (row, index) => index + 1,
       sortable: 'false',
-      width: '60px',
+      width: '80px',
       center: 'true',
       cell: (row, index) => <div className='table-cell'>{index + 1}</div>,
     },
@@ -75,58 +75,50 @@ const ProjectsPage = () => {
       cell: (row) => <div className='table-cell'>{row.nama_project}</div>,
     },
     {
+      name: 'Task',
+      selector: (row) => row.nama_task,
+      sortable: 'true',
+      cell: (row) => <div className='table-cell'>{row.nama_task}</div>,
+    },
+    {
       name: 'Tanggal Mulai',
-      selector: (row) => formatDate(row.tgl_mulai_project),
+      selector: (row) => formatDate(row.tgl_mulai_task),
       sortable: 'true',
       center: 'true',
       width: '200px',
       cell: (row) => (
-        <div className='table-cell'>{formatDate(row.tgl_mulai_project)}</div>
+        <div className='table-cell'>{formatDate(row.tgl_mulai_task)}</div>
       ),
     },
     {
       name: 'Tanggal Selesai',
-      selector: (row) => formatDate(row.tgl_akhir_project),
+      selector: (row) => formatDate(row.tgl_akhir_task),
       sortable: 'true',
       center: 'true',
       width: '200px',
       cell: (row) => (
-        <div className='table-cell'>{formatDate(row.tgl_akhir_project)}</div>
+        <div className='table-cell'>{formatDate(row.tgl_akhir_task)}</div>
       ),
     },
     {
-      name: 'Status',
-      selector: (row) => row.status_project,
+      name: 'Status Task',
+      selector: (row) => row.status_task,
       sortable: 'true',
       center: 'true',
       width: '200px',
       cell: (row) => (
         <div
           className={`rounded-full px-3 py-2 text-center font-medium capitalize text-white ${
-            row.status_project === 'on going'
+            row.status_task === 'on going'
               ? 'bg-amber-500'
-              : row.status_project === 'done'
+              : row.status_task === 'done'
                 ? 'bg-green-500'
                 : 'bg-gray-400'
           }`}
         >
-          {row.status_project || 'Unknown'}
+          {row.status_task || 'Unknown'}
         </div>
       ),
-    },
-    {
-      name: 'Details',
-      cell: (row) => (
-        <Link
-          to={`${row.id_project}`}
-          className='flex items-center gap-x-2 rounded-lg bg-teal-500 px-3 py-2 font-medium text-white hover:bg-teal-600'
-        >
-          <ListCollapse size={16} /> Detail
-        </Link>
-      ),
-      ignoreRowClick: 'true',
-      allowoverflow: 'true',
-      button: 'true',
     },
   ];
 
@@ -135,7 +127,7 @@ const ProjectsPage = () => {
       name: 'Actions',
       cell: (row) => (
         <Link
-          to={`/edit/${row.id_project}`}
+          to={`edit/${row.id_project}`}
           onClick={(event) => handleEdit(event, row.id_project)}
           className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
         >
@@ -210,4 +202,4 @@ const ProjectsPage = () => {
   );
 };
 
-export default ProjectsPage;
+export default DetailProject;

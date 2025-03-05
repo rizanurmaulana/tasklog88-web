@@ -9,6 +9,7 @@ const AddProject = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [formData, setFormData] = useState({
     nama_project: '',
@@ -32,7 +33,7 @@ const AddProject = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:9000/api/v1/projects',
+        `${API_BASE_URL}/api/v1/projects`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
