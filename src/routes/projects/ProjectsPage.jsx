@@ -19,15 +19,25 @@ const ProjectsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `${API_BASE_URL}/api/v1/projects/user/${id_user}`,
-          {
+        if (role === 'peserta') {
+          const res = await axios.get(
+            `${API_BASE_URL}/api/v1/projects/user/${id_user}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+          setData(res.data.data);
+        }
+        if (role === 'pendamping_lapangan' || role === 'pendamping_kampus') {
+          const res = await axios.get(`${API_BASE_URL}/api/v1/projects`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
-        );
-        setData(res.data.data);
+          });
+          setData(res.data.data);
+        }
       } catch (error) {
         setError(error.message);
         setData([]);

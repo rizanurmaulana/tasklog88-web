@@ -21,6 +21,7 @@ import LogPengerjaanPage from './routes/log/LogPengerjaanPage';
 import AddLogPengerjaan from './routes/log/AddLogPengerjaan';
 import DashboardUser from './routes/dashboard/DashboardUser';
 import DetailProject from './routes/projects/DetailProject';
+import LogPengerjaanUser from './routes/log/LogPengerjaan';
 
 function App() {
   const router = createBrowserRouter([
@@ -44,6 +45,7 @@ function App() {
         { path: 'task/:id/add', element: <AddPengerjaan /> },
         { path: 'task/:taskId/:id', element: <LogPengerjaanPage /> },
         { path: 'task/:id/:id/add', element: <AddLogPengerjaan /> },
+        { path: 'logs', element: <LogPengerjaanUser /> },
       ],
     },
     {

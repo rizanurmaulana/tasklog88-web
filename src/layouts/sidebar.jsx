@@ -3,7 +3,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import taskLogo from '../assets/logo-tasklog88.png';
 import { cn } from '../utils/cn';
 import PropTypes from 'prop-types';
-import { Home, LogOut, NotepadText, Package, Users } from 'lucide-react';
+import { Home, LogOut, Logs, NotepadText, Package, Users } from 'lucide-react';
 
 export const Sidebar = forwardRef(({ collapsed }, ref) => {
   const location = useLocation();
@@ -29,6 +29,11 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
           label: 'Task',
           icon: NotepadText,
           path: `/${baseRoute}/task`,
+        },
+        {
+          label: 'Log',
+          icon: Logs,
+          path: `/${baseRoute}/logs`,
         },
         ...(baseRoute === 'pendamping_lapangan' ||
         baseRoute === 'pendamping_kampus'
