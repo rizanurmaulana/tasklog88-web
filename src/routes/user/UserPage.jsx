@@ -13,11 +13,12 @@ const UserPage = () => {
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
   const [filterText, setFilterText] = useState('');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:9000/api/v1/users', {
+        const res = await axios.get(`${API_BASE_URL}/api/v1/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

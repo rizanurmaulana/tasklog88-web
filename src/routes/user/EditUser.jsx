@@ -12,6 +12,7 @@ const AddUser = () => {
   const token = localStorage.getItem('token');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newPassword, setNewPassword] = useState('');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [formData, setFormData] = useState({
     username: '',
@@ -24,7 +25,7 @@ const AddUser = () => {
       if (!id) return;
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:9000/api/v1/users/${id}`, {
+        const res = await axios.get(`${API_BASE_URL}/api/v1/users/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -61,7 +62,7 @@ const AddUser = () => {
     setError('');
 
     try {
-      await axios.put(`http://localhost:9000/api/v1/users/${id}`, formData, {
+      await axios.put(`${API_BASE_URL}/api/v1/users/${id}`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -94,7 +95,7 @@ const AddUser = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:9000/api/v1/users/password/${id}`,
+        `${API_BASE_URL}/api/v1/users/password/${id}`,
         { password: newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );

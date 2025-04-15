@@ -10,7 +10,7 @@ const AddLogPengerjaan = () => {
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
   const { id } = useParams();
-  console.log(id);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [formData, setFormData] = useState({
     catatan: '',
@@ -33,7 +33,7 @@ const AddLogPengerjaan = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:9000/api/v1/log_pengerjaans/${id}`,
+        `${API_BASE_URL}/api/v1/log_pengerjaans/${id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

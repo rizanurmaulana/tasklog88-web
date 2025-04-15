@@ -14,6 +14,7 @@ const PengerjaanPage = () => {
   const [filterText, setFilterText] = useState('');
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +25,7 @@ const PengerjaanPage = () => {
       }
       try {
         const res = await axios.get(
-          `http://localhost:9000/api/v1/pengerjaans/tasks/${id}`,
+          `${API_BASE_URL}/api/v1/pengerjaans/tasks/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },

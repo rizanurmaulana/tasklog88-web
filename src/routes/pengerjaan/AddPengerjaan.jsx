@@ -9,6 +9,7 @@ const AddPengerjaan = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [formData, setFormData] = useState({
     id_task: '',
@@ -25,7 +26,7 @@ const AddPengerjaan = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `http://localhost:9000/api/v1/tasks/${id}`,
+          `${API_BASE_URL}/api/v1/tasks/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -107,7 +108,7 @@ const AddPengerjaan = () => {
 
     try {
       await axios.post(
-        `http://localhost:9000/api/v1/pengerjaans`,
+        `${API_BASE_URL}/api/v1/pengerjaans`,
         formDataToSend,
         {
           headers: {

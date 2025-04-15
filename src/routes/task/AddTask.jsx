@@ -11,6 +11,7 @@ const AddTask = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [formData, setFormData] = useState({
     nama_task: '',
@@ -23,7 +24,7 @@ const AddTask = () => {
 
   const fetchUsers = useCallback(async () => {
     try {
-      const res = await axios.get('http://localhost:9000/api/v1/users', {
+      const res = await axios.get(`${API_BASE_URL}/api/v1/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data.data);
@@ -35,7 +36,7 @@ const AddTask = () => {
 
   const fetchProjects = useCallback(async () => {
     try {
-      const res = await axios.get('http://localhost:9000/api/v1/projects', {
+      const res = await axios.get(`${API_BASE_URL}/api/v1/projects`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProjects(res.data.data);
@@ -65,7 +66,7 @@ const AddTask = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:9000/api/v1/tasks',
+        `${API_BASE_URL}/api/v1/tasks`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
