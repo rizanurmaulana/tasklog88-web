@@ -9,6 +9,7 @@ const AddUser = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [formData, setFormData] = useState({
     username: '',
@@ -32,7 +33,7 @@ const AddUser = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:9000/api/v1/users',
+        `${API_BASE_URL}/api/v1/users`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

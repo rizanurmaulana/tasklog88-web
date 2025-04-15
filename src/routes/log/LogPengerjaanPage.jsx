@@ -15,6 +15,7 @@ const LogPengerjaanPage = () => {
   const [filterText, setFilterText] = useState('');
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +26,7 @@ const LogPengerjaanPage = () => {
       }
       try {
         const res = await axios.get(
-          `http://localhost:9000/api/v1/pengerjaans/log_pengerjaan/${id}`,
+          `${API_BASE_URL}/api/v1/pengerjaans/log_pengerjaan/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -55,7 +56,7 @@ const LogPengerjaanPage = () => {
     const fetchNamaTask = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:9000/api/v1/tasks/${taskId}`,
+          `${API_BASE_URL}/api/v1/tasks/${taskId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

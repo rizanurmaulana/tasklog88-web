@@ -13,6 +13,7 @@ const EditTask = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [formData, setFormData] = useState({
     nama_task: '',
@@ -28,7 +29,7 @@ const EditTask = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `http://localhost:9000/api/v1/tasks/${id}`,
+          `${API_BASE_URL}/api/v1/tasks/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -59,7 +60,7 @@ const EditTask = () => {
 
   const fetchUsers = useCallback(async () => {
     try {
-      const res = await axios.get('http://localhost:9000/api/v1/users', {
+      const res = await axios.get(`${API_BASE_URL}/api/v1/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data.data); // Pastikan API mereturn data array
@@ -71,7 +72,7 @@ const EditTask = () => {
 
   const fetchProjects = useCallback(async () => {
     try {
-      const res = await axios.get('http://localhost:9000/api/v1/projects', {
+      const res = await axios.get(`${API_BASE_URL}/api/v1/projects`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProjects(res.data.data); // Pastikan API mereturn data array
@@ -101,7 +102,7 @@ const EditTask = () => {
 
     try {
       const res = await axios.put(
-        `http://localhost:9000/api/v1/tasks/${id}`,
+        `${API_BASE_URL}/api/v1/tasks/${id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
