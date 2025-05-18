@@ -52,9 +52,10 @@ const AddTask = () => {
   }, [fetchUsers, fetchProjects]);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   };
 
@@ -64,14 +65,28 @@ const AddTask = () => {
     setMessage('');
     setError('');
 
+    // Validasi manual
+    if (
+      !formData.nama_task ||
+      !formData.id_project ||
+      !formData.id_user ||
+      !formData.tgl_mulai_task ||
+      !formData.tgl_akhir_task
+    ) {
+      setError('Semua field wajib diisi.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: 'Semua field wajib diisi!',
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
-      const res = await axios.post(
-        `${API_BASE_URL}/api/v1/tasks`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const res = await axios.post(`${API_BASE_URL}/api/v1/tasks`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       Swal.fire({
         icon: 'success',
@@ -83,13 +98,12 @@ const AddTask = () => {
 
       setTimeout(() => navigate(-1), 2000);
     } catch (err) {
-      console.error('Error creating project:', err);
-      setError(err.response?.data?.message || 'Failed to create project');
-
+      console.error('Error creating task:', err);
+      setError(err.response?.data?.message || 'Gagal membuat tugas');
       Swal.fire({
         icon: 'error',
         title: 'Gagal!',
-        text: err.response?.data?.message || 'Gagal membuat proyek',
+        text: err.response?.data?.message || 'Gagal membuat tugas',
       });
     } finally {
       setLoading(false);
@@ -126,16 +140,14 @@ const AddTask = () => {
               <select
                 name='id_project'
                 id='id_project'
-                value={formData.nama_project}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    id_project: e.target.value,
-                  }))
-                }
+                value={formData.id_project}
+                onChange={handleChange}
+                required
                 className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               >
-                <option disabled>-- Pilih Project --</option>
+                <option value='' disabled>
+                  -- Pilih Project --
+                </option>
                 {projects.length > 0 ? (
                   projects.map((project) => (
                     <option key={project.id_project} value={project.id_project}>
@@ -154,16 +166,14 @@ const AddTask = () => {
               <select
                 name='id_user'
                 id='id_user'
-                value={formData.nama_lengkap}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    id_user: e.target.value,
-                  }))
-                }
+                value={formData.id_user}
+                onChange={handleChange}
+                required
                 className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               >
-                <option disabled>-- Pilih User --</option>
+                <option value='' disabled>
+                  -- Pilih User --
+                </option>
                 {users.length > 0 ? (
                   users.map((user) => (
                     <option key={user.id_user} value={user.id_user}>
@@ -176,10 +186,7 @@ const AddTask = () => {
               </select>
             </div>
             <div className='mb-4'>
-              <label
-                htmlFor='tgl_mulai_task'
-                className='mb-2 block font-medium'
-              >
+              <label htmlFor='tgl_mulai_task' className='mb-2 block font-medium'>
                 Tanggal Mulai
               </label>
               <input
@@ -193,10 +200,7 @@ const AddTask = () => {
               />
             </div>
             <div className='mb-4'>
-              <label
-                htmlFor='tgl_akhir_task'
-                className='mb-2 block font-medium'
-              >
+              <label htmlFor='tgl_akhir_task' className='mb-2 block font-medium'>
                 Tanggal Selesai
               </label>
               <input
@@ -216,6 +220,8 @@ const AddTask = () => {
               <select
                 name='status_task'
                 id='status_task'
+                value={formData.status_task}
+                onChange={handleChange}
                 className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               >
                 <option value='on going'>On Going</option>
@@ -224,11 +230,13 @@ const AddTask = () => {
             </div>
             <button
               type='submit'
-              className='rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
+              disabled={loading}
+              className='rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600 transition'
             >
               {loading ? 'Submitting...' : 'Tambah Tugas'}
             </button>
-            {message && <p className='mt-2 text-center'>{message}</p>}
+            {error && <p className='mt-2 text-red-500'>{error}</p>}
+            {message && <p className='mt-2 text-green-500'>{message}</p>}
           </form>
         </div>
       </div>

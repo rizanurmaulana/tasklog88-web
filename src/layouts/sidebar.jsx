@@ -30,11 +30,15 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
           icon: NotepadText,
           path: `/${baseRoute}/task`,
         },
-        {
-          label: 'Log',
-          icon: Logs,
-          path: `/${baseRoute}/logs`,
-        },
+        ...(baseRoute === 'peserta'
+          ? [
+              {
+                label: 'Log',
+                icon: Logs,
+                path: `/${baseRoute}/logs`,
+              },
+            ]
+          : []),
         ...(baseRoute === 'pendamping_lapangan' ||
         baseRoute === 'pendamping_kampus'
           ? [

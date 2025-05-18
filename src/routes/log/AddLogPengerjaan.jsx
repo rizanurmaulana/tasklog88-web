@@ -48,7 +48,6 @@ const AddLogPengerjaan = () => {
         showConfirmButton: false,
       });
 
-      console.log(res.data);
       setTimeout(() => navigate(-1), 2000);
     } catch (err) {
       console.error('Error creating project:', err);
@@ -88,10 +87,7 @@ const AddLogPengerjaan = () => {
               />
             </div>
             <div className='mb-4'>
-              <label
-                htmlFor='jenis_catatan'
-                className='mb-2 block font-medium'
-              >
+              <label htmlFor='jenis_catatan' className='mb-2 block font-medium'>
                 Jenis Catatan
               </label>
               <select
@@ -106,6 +102,7 @@ const AddLogPengerjaan = () => {
                 </option>
                 <option value='revisi'>Revisi</option>
                 <option value='acc'>Accept</option>
+                <option value='pending'>Pending</option>
               </select>
             </div>
             <div className='mb-4'>

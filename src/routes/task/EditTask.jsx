@@ -28,15 +28,11 @@ const EditTask = () => {
     const fetchTask = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(
-          `${API_BASE_URL}/api/v1/tasks/${id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
+        const res = await axios.get(`${API_BASE_URL}/api/v1/tasks/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         const taskData = res.data.data;
-        console.log(taskData);
         setFormData({
           nama_task: taskData.nama_task || '',
           nama_project: taskData.nama_project || '',
@@ -116,7 +112,6 @@ const EditTask = () => {
         showConfirmButton: false,
       });
 
-      console.log(res.data);
       setTimeout(() => navigate(-1), 2000);
     } catch (err) {
       console.error('Error updating project:', err);

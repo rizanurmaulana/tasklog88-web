@@ -55,16 +55,11 @@ const LogPengerjaanPage = () => {
   useEffect(() => {
     const fetchNamaTask = async () => {
       try {
-        const res = await axios.get(
-          `${API_BASE_URL}/api/v1/tasks/${taskId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const res = await axios.get(`${API_BASE_URL}/api/v1/tasks/${taskId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
-        console.log(taskId);
-        console.log(res.data.data.nama_task);
+        });
         setNamaTask(res.data.data.nama_task);
       } catch (error) {}
     };
@@ -101,15 +96,15 @@ const LogPengerjaanPage = () => {
       width: '200px',
       cell: (row) => (
         <div
-          className={`rounded-full px-3 py-2 font-medium capitalize text-white ${
+          className={`rounded-full px-3 py-2 font-medium uppercase text-white ${
             row.jenis_catatan === 'acc'
               ? 'bg-green-500'
               : row.jenis_catatan === 'revisi'
                 ? 'bg-amber-500'
-                : 'bg-gray-400'
+                : 'bg-red-400'
           }`}
         >
-          {row.jenis_catatan || 'Unknown'}
+          {row.jenis_catatan || 'Pending'}
         </div>
       ),
     },
@@ -130,7 +125,7 @@ const LogPengerjaanPage = () => {
               className='w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300'
             />
           </div>
-          {role === 'peserta' && (
+          {(role === 'peserta' || role === 'pendamping_lapangan') && (
             <Link
               to='add'
               className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 text-white'

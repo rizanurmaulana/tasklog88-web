@@ -25,12 +25,9 @@ const AddPengerjaan = () => {
     const fetchProject = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(
-          `${API_BASE_URL}/api/v1/tasks/${id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
+        const res = await axios.get(`${API_BASE_URL}/api/v1/tasks/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         if (!res.data || !res.data.data) {
           setError('Task tidak ditemukan');
@@ -107,16 +104,12 @@ const AddPengerjaan = () => {
     formDataToSend.append('tgl_pengerjaan', formData.tgl_pengerjaan);
 
     try {
-      await axios.post(
-        `${API_BASE_URL}/api/v1/pengerjaans`,
-        formDataToSend,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
+      await axios.post(`${API_BASE_URL}/api/v1/pengerjaans`, formDataToSend, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
-      );
+      });
 
       Swal.fire({
         icon: 'success',
@@ -209,15 +202,21 @@ const AddPengerjaan = () => {
               <label htmlFor='jenis_catatan' className='mb-2 block font-medium'>
                 Jenis Catatan
               </label>
-              <input
-                type='text'
+              <select
                 id='jenis_catatan'
                 name='jenis_catatan'
                 value={formData.jenis_catatan}
                 onChange={handleChange}
                 required
                 className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
-              />
+              >
+                <option value='' disabled>
+                  Pilih Jenis Catatan
+                </option>
+                <option value='acc'>Accept</option>
+                <option value='rev'>Revisi</option>
+                <option value='pending'>Pending</option>
+              </select>
             </div>
 
             <div className='mb-4'>

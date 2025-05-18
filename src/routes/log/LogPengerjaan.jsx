@@ -1,20 +1,19 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { NotebookTabs, Search, SquarePlus } from 'lucide-react';
+import { Search } from 'lucide-react';
 import DataTable from 'react-data-table-component';
 
 const LogPengerjaan = () => {
   const navigate = useNavigate();
-  const { id, taskId } = useParams();
+  const { taskId } = useParams();
   const [data, setData] = useState([]);
   const [namaTask, setNamaTask] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterText, setFilterText] = useState('');
   const token = localStorage.getItem('token');
-  const role = localStorage.getItem('role');
   const id_user = localStorage.getItem('id_user');
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -30,16 +29,15 @@ const LogPengerjaan = () => {
           `${API_BASE_URL}/api/v1/pengerjaans/log/user/${id_user}`,
           {
             headers: { Authorization: `Bearer ${token}` },
-          },
+          }
         );
 
-        if (Array.isArray(res.data.data)) {
-          console.log(res.data.data);
-          setData(res.data.data);
-        } else if (res.data.data && typeof res.data.data === 'object') {
-          setData([res.data.data]);
+        const logData = res.data?.data;
+        if (Array.isArray(logData)) {
+          setData(logData);
+        } else if (logData && typeof logData === 'object') {
+          setData([logData]);
         } else {
-          console.error('Data yang diterima tidak sesuai format:', res.data);
           setData([]);
         }
       } catch (error) {
@@ -52,30 +50,29 @@ const LogPengerjaan = () => {
     };
 
     fetchData();
-  }, [id, token]);
+  }, [token, id_user]);
 
   useEffect(() => {
     const fetchNamaTask = async () => {
       try {
-        const res = await axios.get(
-          `${API_BASE_URL}/api/v1/tasks/${taskId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const res = await axios.get(`${API_BASE_URL}/api/v1/tasks/${taskId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
-        console.log(taskId);
-        console.log(res.data.data.nama_task);
-        setNamaTask(res.data.data.nama_task);
-      } catch (error) {}
+        });
+        setNamaTask(res.data?.data?.nama_task || '');
+      } catch (error) {
+        console.error('Gagal mengambil nama task:', error);
+        setNamaTask('');
+      }
     };
 
-    fetchNamaTask();
-  }, [id, token]);
+    if (taskId) fetchNamaTask();
+  }, [taskId, token]);
 
   const filteredData = data.filter((item) =>
-    item.nama_task?.toLowerCase().includes(filterText.toLowerCase()),
+    item.nama_project?.toLowerCase().includes(filterText.toLocaleLowerCase()) ||
+    item.nama_task?.toLowerCase().includes(filterText.toLowerCase())
   );
 
   const columns = [
@@ -83,55 +80,55 @@ const LogPengerjaan = () => {
       name: 'No',
       selector: (_, index) => index + 1,
       width: '60px',
-      center: 'true',
+      center: true,
     },
     {
       name: 'Project',
       selector: (row) => row.nama_project || '-',
-      sortable: 'true',
+      sortable: true,
     },
     {
       name: 'Task',
       selector: (row) => row.nama_task || '-',
-      sortable: 'true',
+      sortable: true,
     },
     {
       name: 'Mulai Tugas',
       selector: (row) => row.tgl_mulai_task || '-',
-      sortable: 'true',
+      sortable: true,
     },
     {
       name: 'Akhir Tugas',
       selector: (row) => row.tgl_akhir_task || '-',
-      sortable: 'true',
+      sortable: true,
     },
     {
       name: 'Tanggal Pengerjaan',
       selector: (row) => row.tgl_pengerjaan || '-',
-      sortable: 'true',
+      sortable: true,
     },
     {
       name: 'Catatan',
       selector: (row) => row.catatan || '-',
-      sortable: 'true',
+      sortable: true,
     },
     {
       name: 'Status',
       selector: (row) => row.jenis_catatan,
-      sortable: 'true',
-      center: 'true',
-      width: '100px',
+      sortable: true,
+      center: true,
+      width: '180px',
       cell: (row) => (
         <div
           className={`rounded-full px-3 py-2 font-medium uppercase text-white ${
             row.jenis_catatan === 'acc'
               ? 'bg-green-500'
               : row.jenis_catatan === 'revisi'
-                ? 'bg-amber-500'
-                : 'bg-gray-400'
+              ? 'bg-amber-500'
+              : 'bg-red-400'
           }`}
         >
-          {row.jenis_catatan || 'Unknown'}
+          {row.jenis_catatan || 'Pending'}
         </div>
       ),
     },
@@ -140,7 +137,7 @@ const LogPengerjaan = () => {
   return (
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
-        <h1 className='title'>Log Pengerjaan</h1>
+        <h1 className='title'>Log Pengerjaan {namaTask && `- ${namaTask}`}</h1>
         <div className='flex gap-x-4'>
           <div className='input'>
             <Search size={20} className='text-slate-300' />
@@ -152,21 +149,16 @@ const LogPengerjaan = () => {
               className='w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300'
             />
           </div>
-          {role === 'peserta' && (
-            <Link
-              to='add'
-              className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 text-white'
-            >
-              <SquarePlus /> Add Log
-            </Link>
-          )}
         </div>
       </div>
       <div className='card'>
         <div className='card-body p-0'>
+          {error && (
+            <div className='p-4 text-red-500 font-medium'>{error}</div>
+          )}
           <DataTable
             columns={columns}
-            data={data}
+            data={filteredData}
             progressPending={loading}
             pagination
             highlightOnHover
