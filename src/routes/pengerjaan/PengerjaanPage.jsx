@@ -31,8 +31,6 @@ const PengerjaanPage = () => {
           },
         );
 
-        console.log('Response dari API:', res.data);
-
         if (Array.isArray(res.data.data)) {
           setData(res.data.data);
         } else if (res.data.data && typeof res.data.data === 'object') {

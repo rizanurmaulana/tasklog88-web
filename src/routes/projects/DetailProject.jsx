@@ -122,42 +122,24 @@ const DetailProject = () => {
     },
   ];
 
-  if (role === 'pendamping_lapangan') {
-    columns.push({
-      name: 'Actions',
-      cell: (row) => (
-        <Link
-          to={`edit/${row.id_project}`}
-          onClick={(event) => handleEdit(event, row.id_project)}
-          className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white hover:bg-blue-600'
-        >
-          <PencilLine size={16} /> Edit
-        </Link>
-      ),
-      ignoreRowClick: 'true',
-      allowoverflow: 'true',
-      button: 'true',
-    });
-  }
+  // const handleEdit = (event, projectId) => {
+  //   event.preventDefault(); // Mencegah navigasi otomatis
 
-  const handleEdit = (event, projectId) => {
-    event.preventDefault(); // Mencegah navigasi otomatis
-
-    Swal.fire({
-      title: 'Apakah Anda yakin?',
-      text: 'Anda akan mengubah data proyek ini!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Edit',
-      cancelButtonText: 'Batal',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate(`edit/${projectId}`); // Pindah ke halaman edit jika dikonfirmasi
-      }
-    });
-  };
+  //   Swal.fire({
+  //     title: 'Apakah Anda yakin?',
+  //     text: 'Anda akan mengubah data proyek ini!',
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Edit',
+  //     cancelButtonText: 'Batal',
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       navigate(`edit/${projectId}`); // Pindah ke halaman edit jika dikonfirmasi
+  //     }
+  //   });
+  // };
 
   return (
     <div className='flex flex-col gap-y-4'>
@@ -176,14 +158,6 @@ const DetailProject = () => {
               className='w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300'
             />
           </div>
-          {role === 'pendamping_lapangan' && (
-            <Link
-              to='add'
-              className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
-            >
-              <SquarePlus /> Add Project
-            </Link>
-          )}
         </div>
       </div>
       <div className='card'>

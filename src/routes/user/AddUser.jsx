@@ -32,13 +32,9 @@ const AddUser = () => {
     setError('');
 
     try {
-      const res = await axios.post(
-        `${API_BASE_URL}/api/v1/users`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const res = await axios.post(`${API_BASE_URL}/api/v1/users`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       Swal.fire({
         icon: 'success',
@@ -48,7 +44,6 @@ const AddUser = () => {
         showConfirmButton: false,
       });
 
-      console.log(res.data);
       setTimeout(() => navigate(-1), 2000);
     } catch (err) {
       console.error('Error creating project:', err);
@@ -131,7 +126,9 @@ const AddUser = () => {
                 onChange={handleChange}
                 className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               >
-                <option disabled value=''>-- Pilih Role --</option>
+                <option disabled value=''>
+                  -- Pilih Role --
+                </option>
                 <option value='peserta'>Peserta</option>
                 <option value='pendamping_lapangan'>Pendamping Lapangan</option>
                 <option value='pendamping_kampus'>Pendamping Kampus</option>

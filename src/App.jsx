@@ -63,6 +63,7 @@ function App() {
         { path: 'task/edit/:id', element: <EditTask /> },
         { path: 'task/:id', element: <PengerjaanPage /> },
         { path: 'task/:taskId/:id', element: <LogPengerjaanPage /> },
+        { path: 'task/:id/:id/add', element: <AddLogPengerjaan /> },
         { path: 'user', element: <UserPage /> },
         { path: 'user/add', element: <AddUser /> },
         { path: 'user/edit/:id', element: <EditUser /> },

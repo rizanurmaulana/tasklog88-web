@@ -100,8 +100,6 @@ const AddUser = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      console.log('Response:', response); // Debugging
-
       Swal.fire({
         icon: 'success',
         title: 'Berhasil!',
