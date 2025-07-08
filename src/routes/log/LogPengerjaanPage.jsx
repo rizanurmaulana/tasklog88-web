@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { NotebookTabs, Search, SquarePlus } from 'lucide-react';
+import { Search, SquarePlus } from 'lucide-react';
 import DataTable from 'react-data-table-component';
 
 const LogPengerjaanPage = () => {
@@ -61,11 +61,14 @@ const LogPengerjaanPage = () => {
           },
         });
         setNamaTask(res.data.data.nama_task);
-      } catch (error) {}
+      } catch (error) {
+        console.error('Gagal ambil nama task:', error);
+        setNamaTask('');
+      }
     };
 
-    fetchNamaTask();
-  }, [id, token]);
+    if (taskId) fetchNamaTask();
+  }, [taskId, token]);
 
   const filteredData = data.filter((item) =>
     item.nama_task?.toLowerCase().includes(filterText.toLowerCase()),
@@ -76,23 +79,23 @@ const LogPengerjaanPage = () => {
       name: 'No',
       selector: (_, index) => index + 1,
       width: '60px',
-      center: 'true',
+      center: true,
     },
     {
       name: 'Tanggal Pengerjaan',
       selector: (row) => row.tgl_pengerjaan || '-',
-      sortable: 'true',
+      sortable: true,
     },
     {
       name: 'Catatan',
       selector: (row) => row.catatan || '-',
-      sortable: 'true',
+      sortable: true,
     },
     {
       name: 'Status',
       selector: (row) => row.jenis_catatan,
-      sortable: 'true',
-      center: 'true',
+      sortable: true,
+      center: true,
       width: '200px',
       cell: (row) => (
         <div
@@ -113,7 +116,9 @@ const LogPengerjaanPage = () => {
   return (
     <div className='flex flex-col gap-y-4'>
       <div className='flex items-center justify-between'>
-        <h1 className='title'>Log Pengerjaan</h1>
+        <h1 className='title'>
+          Log Pengerjaan {namaTask && `- ${namaTask}`}
+        </h1>
         <div className='flex gap-x-4'>
           <div className='input'>
             <Search size={20} className='text-slate-300' />
@@ -137,9 +142,12 @@ const LogPengerjaanPage = () => {
       </div>
       <div className='card'>
         <div className='card-body p-0'>
+          {error && (
+            <div className='p-4 text-red-500 font-medium'>{error}</div>
+          )}
           <DataTable
             columns={columns}
-            data={data}
+            data={filteredData}
             progressPending={loading}
             pagination
             highlightOnHover

@@ -1,8 +1,8 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { Search } from 'lucide-react';
+import { Search, SquarePlus } from 'lucide-react';
 import DataTable from 'react-data-table-component';
 
 const LogPengerjaan = () => {
@@ -15,6 +15,7 @@ const LogPengerjaan = () => {
   const [filterText, setFilterText] = useState('');
   const token = localStorage.getItem('token');
   const id_user = localStorage.getItem('id_user');
+  const role = localStorage.getItem('role'); // ✅ TAMBAH INI
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
@@ -149,13 +150,19 @@ const LogPengerjaan = () => {
               className='w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300'
             />
           </div>
+          {role === 'pendamping_lapangan' && (
+            <Link
+              to='add'
+              className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 text-white'
+            >
+              <SquarePlus /> Add Log
+            </Link>
+          )}
         </div>
       </div>
       <div className='card'>
         <div className='card-body p-0'>
-          {error && (
-            <div className='p-4 text-red-500 font-medium'>{error}</div>
-          )}
+          {error && <div className='p-4 text-red-500 font-medium'>{error}</div>}
           <DataTable
             columns={columns}
             data={filteredData}
