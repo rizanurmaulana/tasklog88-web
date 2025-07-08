@@ -151,7 +151,7 @@ const LogPengerjaan = () => {
               className='w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300'
             />
           </div>
-          {role === 'peserta' && (
+          {role === 'pendamping_lapangan' && (
             <Link
               to='add'
               className='flex items-center gap-x-2 rounded-lg bg-blue-500 px-3 py-2 text-white'

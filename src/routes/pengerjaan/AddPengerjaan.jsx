@@ -3,8 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+
 const AddPengerjaan = () => {
   const { id } = useParams();
+  const role=localStorage.getItem("role");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -17,7 +19,7 @@ const AddPengerjaan = () => {
     file_ss: null,
     catatan: '',
     jenis_catatan: '',
-    tgl_pengerjaan: '',
+    tgl_pengerjaan: new Date().toISOString().split('T')[0], // Set default ke hari ini
   });
 
   useEffect(() => {
@@ -51,9 +53,9 @@ const AddPengerjaan = () => {
           file_github: null,
           file_ss: null,
           status_task: pengerjaanData.status_task || '',
-          catatan: pengerjaanData.catatan || '',
-          jenis_catatan: pengerjaanData.jenis_catatan || '',
-          tgl_pengerjaan: pengerjaanData.tgl_pengerjaan || '',
+          catatan: role !== 'peserta' ? pengerjaanData.catatan || '' : '',
+          jenis_catatan: role !== 'peserta' ? pengerjaanData.jenis_catatan || '' : '',
+          tgl_pengerjaan: new Date().toISOString().split('T')[0], // Tetap set hari ini
         });
       } catch (err) {
         setError('Gagal mengambil data pengerjaan');
@@ -63,7 +65,7 @@ const AddPengerjaan = () => {
     };
 
     if (id) fetchProject();
-  }, [id, token]);
+  }, [id, token, role]);
 
   const handleChange = (e) => {
     const { name, type, files, value } = e.target;
@@ -94,6 +96,7 @@ const AddPengerjaan = () => {
 
     const formDataToSend = new FormData();
     formDataToSend.append('id_task', formData.id_task);
+    formDataToSend.append('tgl_pengerjaan', new Date().toISOString().split('T')[0]); // Kirim tanggal hari ini
 
     if (formData.file_github) {
       formDataToSend.append('file_github', formData.file_github);
@@ -101,9 +104,10 @@ const AddPengerjaan = () => {
     if (formData.file_ss) {
       formDataToSend.append('file_ss', formData.file_ss);
     }
-    formDataToSend.append('catatan', formData.catatan);
-    formDataToSend.append('jenis_catatan', formData.jenis_catatan);
-    formDataToSend.append('tgl_pengerjaan', formData.tgl_pengerjaan);
+    if (role !== 'peserta') {
+      formDataToSend.append('catatan', formData.catatan);
+      formDataToSend.append('jenis_catatan', formData.jenis_catatan);
+    }
 
     try {
       await axios.post(
@@ -189,41 +193,42 @@ const AddPengerjaan = () => {
               />
             </div>
 
-            <div className='mb-4'>
-              <label htmlFor='catatan' className='mb-2 block font-medium'>
-                Catatan
-              </label>
-              <input
-                type='text'
-                id='catatan'
-                name='catatan'
-                value={formData.catatan}
-                onChange={handleChange}
-                required
-                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
-              />
-            </div>
+            {role !== 'peserta' && (
+              <>
+                <div className='mb-4'>
+                  <label htmlFor='catatan' className='mb-2 block font-medium'>
+                    Catatan
+                  </label>
+                  <input
+                    type='text'
+                    id='catatan'
+                    name='catatan'
+                    value={formData.catatan}
+                    onChange={handleChange}
+                    required
+                    className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
+                  />
+                </div>
+
+                <div className='mb-4'>
+                  <label htmlFor='jenis_catatan' className='mb-2 block font-medium'>
+                    Jenis Catatan
+                  </label>
+                  <input
+                    type='text'
+                    id='jenis_catatan'
+                    name='jenis_catatan'
+                    value={formData.jenis_catatan}
+                    onChange={handleChange}
+                    required
+                    className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
+                  />
+                </div>
+              </>
+            )}
 
             <div className='mb-4'>
-              <label htmlFor='jenis_catatan' className='mb-2 block font-medium'>
-                Jenis Catatan
-              </label>
-              <input
-                type='text'
-                id='jenis_catatan'
-                name='jenis_catatan'
-                value={formData.jenis_catatan}
-                onChange={handleChange}
-                required
-                className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
-              />
-            </div>
-
-            <div className='mb-4'>
-              <label
-                htmlFor='tgl_pengerjaan'
-                className='mb-2 block font-medium'
-              >
+              <label htmlFor='tgl_pengerjaan' className='mb-2 block font-medium'>
                 Tanggal Pengerjaan
               </label>
               <input
@@ -231,17 +236,12 @@ const AddPengerjaan = () => {
                 id='tgl_pengerjaan'
                 name='tgl_pengerjaan'
                 value={formData.tgl_pengerjaan}
-                onChange={handleChange}
-                required
+                disabled
                 className='w-full rounded-lg border border-slate-300 px-3 py-2 outline-none'
               />
             </div>
 
-            <button
-              type='submit'
-              className='rounded-lg bg-blue-500 px-3 py-2 font-medium text-white'
-              disabled={loading}
-            >
+            <button type='submit' className='rounded-lg bg-blue-500 px-3 py-2 font-medium text-white' disabled={loading}>
               {loading ? 'Loading...' : 'Simpan Pengerjaan'}
             </button>
           </form>
